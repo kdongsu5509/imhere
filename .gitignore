@@ -1,0 +1,105 @@
+# -----------------------------
+# 1. 공통 무시 대상 (Common)
+# -----------------------------
+.DS_Store
+*.log
+*.tmp
+*.bak
+*~
+*.swp
+*.pyc
+/log/
+/temp/
+logs/
+temp/
+README.md # HELP.md가 포함되므로 README도 무시하는 것이 일관적입니다.
+HELP.md # 새로 추가: Spring 프로젝트 내 HELP.md (일반적으로 추적 X)
+
+# -----------------------------
+# 2. Flutter 프로젝트 무시 대상 (Flutter)
+# -----------------------------
+/Flutter/.dart_tool/
+/Flutter/.flutter-plugins
+/Flutter/.flutter-plugins-dependencies
+/Flutter/build/
+/Flutter/.pub-cache/
+/Flutter/.pub/
+/Flutter/**/doc/api/
+/Flutter/**/ios/Flutter/.last_build_id
+
+# Android 빌드 관련 (Flutter 내부)
+/Flutter/android/.gradle/
+/Flutter/android/app/build/
+/Flutter/android/local.properties
+/Flutter/android/app/debug/
+/Flutter/android/app/profile/
+/Flutter/android/app/release/
+
+# iOS 빌드 관련 (Flutter 내부)
+/Flutter/ios/.symlinks/
+/Flutter/ios/Pods/
+/Flutter/ios/Runner.xcworkspace/
+/Flutter/ios/Runner.xcodeproj/project.xcworkspace/
+
+
+# -----------------------------
+# 3. Spring 프로젝트 무시 대상 (Spring)
+# -----------------------------
+
+### Gradle ###
+/Spring/build/
+/Spring/.gradle/
+# Gradle Wrapper JAR 파일은 무시하되, Wrapper 설정 파일은 포함 (Git 추적 유지)
+!/Spring/gradle/wrapper/gradle-wrapper.properties
+/Spring/gradle/wrapper/gradle-wrapper.jar
+
+# 소스 내부의 build 폴더는 무시
+!/Spring/**/src/main/**/build/
+!/Spring/**/src/test/**/build/
+
+
+### STS/Eclipse ###
+/Spring/.apt_generated
+/Spring/.classpath
+/Spring/.factorypath
+/Spring/.project
+/Spring/.settings
+/Spring/.springBeans
+/Spring/.sts4-cache
+/Spring/bin/
+# 소스 내부의 bin 폴더는 무시
+!/Spring/**/src/main/**/bin/
+!/Spring/**/src/test/**/bin/
+
+
+### IntelliJ IDEA ###
+/Spring/.idea
+/Spring/*.iws
+/Spring/*.iml
+/Spring/*.ipr
+/Spring/out/
+# 소스 내부의 out 폴더는 무시
+!/Spring/**/src/main/**/out/
+!/Spring/**/src/test/**/out/
+
+
+### NetBeans ###
+/Spring/nbproject/private/
+/Spring/nbbuild/
+/Spring/dist/
+/Spring/nbdist/
+/Spring/.nb-gradle/
+
+
+### VS Code ###
+/Spring/.vscode/
+
+
+### Kotlin ###
+/Spring/.kotlin
+
+
+# 환경 설정 파일 (민감 정보 포함 가능성)
+/Spring/src/main/resources/application*.yaml
+/Spring/src/main/resources/application*.properties
+/Spring/src/main/resources/application*.yml
