@@ -4,20 +4,8 @@ about: 프로젝트 설정 변경, 의존성/빌드 도구 업데이트, 기타 
 title: "[Chore] "
 labels: chore
 assignees:
-  - kdongsu5509
+- kdongsu5509
 ---
-
-### 이름: 작업 요청 (Chore)
-
-### 설명: 프로젝트 설정 변경, 의존성/빌드 도구 업데이트, 기타 유지보수 작업을 요청합니다
-
-### 제목: "[Chore] 작업 대상 요약 (예: Flutter SDK 버전 업데이트)"
-
-### 라벨: chore, maintenance
-
-### 담당자: kdongsu5509
-
------
 
 ### 🛠️ 작업 대상 영역
 

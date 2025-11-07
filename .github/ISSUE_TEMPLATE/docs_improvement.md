@@ -4,20 +4,8 @@ about: 프로젝트 문서 수정, 보완 또는 새로운 문서 작성을 제�
 title: "[Docs] "
 labels: docs
 assignees:
-  - kdongsu5509
+- kdongsu5509
 ---
-
-### 이름: 문서 개선 요청
-
-### 설명: 프로젝트 문서(README, API 명세, 코드 가이드 등)의 수정, 보완, 또는 신규 작성을 요청합니다
-
-### 제목: "[Docs] 문서 개선 대상 및 내용 요약"
-
-### 라벨: docs, documentation
-
-### 담당자: kdongsu5509
-
------
 
 ### 📑 개선 대상 문서 유형
 
