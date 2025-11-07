@@ -4,20 +4,8 @@ about: 새로운 기능 추가 또는 기존 기능의 개선을 제안합니다
 title: "[Feature] "
 labels: feat, perf
 assignees:
-  - kdongsu5509
+- kdongsu5509
 ---
-
-### 이름: 기능 제안
-
-### 설명: 새로운 기능 추가 또는 기존 기능의 개선을 제안합니다
-
-### 제목: "[Feature] [영역] 간결하게 기능 내용 요약"
-
-### 라벨: feature, enhancement, needs design
-
-### 담당자: kdongsu5509
-
------
 
 ### 🎯 제안하는 기능의 목표 및 배경
 

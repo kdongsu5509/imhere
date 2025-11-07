@@ -11,12 +11,6 @@ assignees:
 
 ### 설명: 프론트엔드(Flutter) 또는 백엔드(Spring Boot) 개발 중 발생한 문제를 신고합니다
 
-### 제목: "[Bug] 해당 기능에서 발생한 문제 요약"
-
-### 라벨: bug, needs triage
-
-### 담당자: kdongsu5509
-
 -----
 
 ### 📍 발생한 기능 및 도메인
