@@ -2,7 +2,7 @@
 name: 작업 요청 (Chore)
 about: 프로젝트 설정 변경, 의존성/빌드 도구 업데이트, 기타 유지보수 작업을 요청합니다.
 title: "[Chore] "
-labels: chore, maintenance
+labels: chore
 assignees:
   - kdongsu5509
 ---

@@ -2,7 +2,7 @@
 name: 테스트 관련 요청 (Test Request)
 about: 테스트 케이스 추가, 리팩토링, 또는 테스트 환경 개선을 요청합니다.
 title: "[Test] "
-labels: test, quality
+labels: test
 assignees:
   - kdongsu5509
 ---

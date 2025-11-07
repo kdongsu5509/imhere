@@ -2,7 +2,7 @@
 name: 문서 개선 요청 (Documentation Improvement)
 about: 프로젝트 문서 수정, 보완 또는 새로운 문서 작성을 제안합니다.
 title: "[Docs] "
-labels: docs, documentation
+labels: docs
 assignees:
   - kdongsu5509
 ---

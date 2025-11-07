@@ -2,7 +2,7 @@
 name: 기능 제안 (Feature Suggestion)
 about: 새로운 기능 추가 또는 기존 기능의 개선을 제안합니다.
 title: "[Feature] "
-labels: feature, enhancement, needs design
+labels: feat, perf
 assignees:
   - kdongsu5509
 ---

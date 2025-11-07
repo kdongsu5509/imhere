@@ -2,7 +2,7 @@
 name: 버그 제보 (Bug Report)
 about: 프론트엔드(Flutter) 또는 백엔드(Spring Boot) 개발 중 발생한 문제를 신고합니다.
 title: "[Bug] "
-labels: bug, needs triage
+labels: bug
 assignees:
 - kdongsu5509
 ---
