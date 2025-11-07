@@ -1,0 +1,33 @@
+blank_issues_enabled: false
+
+issue_templates:
+  # 1. 버그 제보 템플릿 (Bug Report)
+  - name: 버그 제보 (Bug Report)
+    description: 프론트엔드(Flutter) 또는 백엔드(Spring Boot) 개발 중 발생한 문제를 신고합니다.
+    file: ISSUE_TEMPLATE/bug_report.md
+  
+  # 2. 기능 제안 템플릿 (Feature Suggestion)
+  - name: 기능 제안 (Feature Suggestion)
+    description: 새로운 기능 추가 또는 기존 기능의 개선을 제안합니다.
+    file: ISSUE_TEMPLATE/feature_suggestion.md
+    
+  # 3. 작업 요청 템플릿 (Chore)
+  - name: 작업 요청 (Chore Request)
+    description: 프로젝트 설정 변경, 의존성/빌드 도구 업데이트, 기타 유지보수 작업을 요청합니다.
+    file: ISSUE_TEMPLATE/chore_request.md
+    
+  # 4. 문서 개선 요청 템플릿 (Docs)
+  - name: 문서 개선 요청 (Documentation Improvement)
+    description: 프로젝트 문서(README, API 명세, 코드 가이드 등)의 수정, 보완, 또는 신규 작성을 요청합니다.
+    file: ISSUE_TEMPLATE/docs_improvement.md
+
+  # 5. 테스트 관련 요청 템플릿 (Test Request)
+  - name: 테스트 관련 요청 (Test Request)
+    description: 테스트 케이스 추가, 리팩토링, 또는 테스트 환경 개선을 요청합니다.
+    file: ISSUE_TEMPLATE/test_request.md
+
+pull_request_templates:
+  # Pull Request 템플릿은 하나로 통합
+  - name: 기본 PR Template
+    description: Flutter와 Spring Boot 프로젝트의 공용 PR 템플릿입니다.
+    file: PULL_REQUEST_TEMPLATE/PULL_REQUEST_TEMPLATE.md
