@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iamhere/auth/view/auth_view.dart';
 import 'package:iamhere/common/theme/im_here_them_data_dark.dart';
 import 'package:iamhere/common/theme/im_here_them_data_light.dart';
 import 'package:iamhere/common/view_component/default_view.dart';
@@ -30,7 +31,8 @@ class _ImHereAppState extends State<ImHereApp> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeMode,
-      home: DefaultView(child: HomeScreen(toggleTheme: toggleTheme, isDarkMode: _themeMode == ThemeMode.dark))
+      home: AuthView(),
+      // home: DefaultView(child: HomeScreen(toggleTheme: toggleTheme, isDarkMode: _themeMode == ThemeMode.dark))
     );
   }
 }
