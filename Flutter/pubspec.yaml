@@ -66,3 +66,6 @@ flutter:
     - family: BMHANNAAir
       fonts:
         - asset: assets/fonts/BMHANNAAir_ttf.ttf
+    - family: BMDOHYEON
+      fonts:
+        - asset: assets/fonts/BMDOHYEON_ttf.ttf
