@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iamhere/common/theme/im_here_them_data_dark.dart';
 import 'package:iamhere/common/theme/im_here_them_data_light.dart';
+import 'package:iamhere/common/view_component/default_view.dart';
 
 void main() {
   runApp(const ImHereApp());
@@ -29,7 +30,7 @@ class _ImHereAppState extends State<ImHereApp> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeMode,
-      home: HomeScreen(toggleTheme: toggleTheme, isDarkMode: _themeMode == ThemeMode.dark),
+      home: DefaultView(child: HomeScreen(toggleTheme: toggleTheme, isDarkMode: _themeMode == ThemeMode.dark))
     );
   }
 }
@@ -77,13 +78,6 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       // BottomNavigationBar도 테마 설정을 따릅니다.
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.location_on), label: '지오펜스'),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: '연락처'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: '기록'),
-        ],
-      ),
     );
   }
 }

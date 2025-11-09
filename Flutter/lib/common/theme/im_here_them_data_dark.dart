@@ -64,7 +64,7 @@ final ThemeData darkTheme = ThemeData(
   // **5. 텍스트 테마 (선택 사항)**
   fontFamily: 'BMHANNAAir',
   textTheme: const TextTheme(
-    headlineLarge: TextStyle(fontFamily: 'BMHANNAPro'),
+    headlineLarge: TextStyle(fontFamily: 'BMDOHYEON'),
 
     headlineMedium: TextStyle(fontFamily: 'BMJUA', fontWeight: FontWeight.w400),
 
