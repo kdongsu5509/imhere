@@ -19,6 +19,10 @@ HELP.md # 새로 추가: Spring 프로젝트 내 HELP.md (일반적으로 추적
 # 2. Flutter 프로젝트 무시 대상 (Flutter)
 # -----------------------------
 /Flutter/.dart_tool/
+/Flutter/.idea/
+/Flutter/*.iml
+/Flutter/.metadata
+/Flutter/.packages
 /Flutter/.flutter-plugins
 /Flutter/.flutter-plugins-dependencies
 /Flutter/build/
