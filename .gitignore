@@ -12,6 +12,7 @@
 /temp/
 logs/
 temp/
+.idea/
 README.md # HELP.md가 포함되므로 README도 무시하는 것이 일관적입니다.
 HELP.md # 새로 추가: Spring 프로젝트 내 HELP.md (일반적으로 추적 X)
 
