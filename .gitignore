@@ -46,6 +46,11 @@ HELP.md # 새로 추가: Spring 프로젝트 내 HELP.md (일반적으로 추적
 /Flutter/ios/Runner.xcworkspace/
 /Flutter/ios/Runner.xcodeproj/project.xcworkspace/
 
+# riverpod 파일 관리
+*.g.dart
+
+# 민감 데이터 관리(Flutter 내부 민감 데이터)
+/Flutter/*.env
 
 # -----------------------------
 # 3. Spring 프로젝트 무시 대상 (Spring)

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iamhere/auth/view/auth_view.dart';
 import 'package:iamhere/common/theme/im_here_them_data_dark.dart';
 import 'package:iamhere/common/theme/im_here_them_data_light.dart';
-import 'package:iamhere/common/view_component/default_view.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-void main() {
-  runApp(const ImHereApp());
+Future main() async {
+  await dotenv.load(fileName: "iam_here_flutter_secret.env");
+  WidgetsFlutterBinding.ensureInitialized();
+  KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY']);
+  runApp(const ProviderScope(child: ImHereApp()));
 }
 
 class ImHereApp extends StatefulWidget {
@@ -23,6 +28,7 @@ class _ImHereAppState extends State<ImHereApp> {
       _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
     });
   }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -36,15 +42,19 @@ class _ImHereAppState extends State<ImHereApp> {
     );
   }
 }
+
 class HomeScreen extends StatelessWidget {
   final Function(bool) toggleTheme;
   final bool isDarkMode;
 
-  const HomeScreen({super.key, required this.toggleTheme, required this.isDarkMode});
+  const HomeScreen({
+    super.key,
+    required this.toggleTheme,
+    required this.isDarkMode,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Theme.of(context)를 사용하여 현재 적용된 테마의 속성을 가져옵니다.
     final theme = Theme.of(context);
 
     return Scaffold(
