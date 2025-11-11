@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iamhere/common/view_component/Flexible.dart';
+import 'package:iamhere/common/view_component/FlexibleScreen.dart';
 import 'package:iamhere/common/view_component/auth/login_button_info.dart';
 
 class LoginButton extends StatelessWidget {
@@ -13,8 +13,8 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = FlexibleValue.getWidth(context);
-    final height = FlexibleValue.getHeight(context);
+    final width = FlexibleScreen.getWidth(context);
+    final height = FlexibleScreen.getHeight(context);
 
     final Color borderColor = borderColorSelector();
 

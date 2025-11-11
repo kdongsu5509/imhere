@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class FlexibleValue {
+class FlexibleScreen {
   static double getWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
