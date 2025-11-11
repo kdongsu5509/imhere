@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.application.service
+package com.kdongsu5509.imhere.auth.application.service.oidc
 
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
@@ -14,19 +14,19 @@ import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
 import java.util.*
 
-class KakaoOidcIdTokenVerifierTest {
+class KakaoOIDCVerifierTest {
 
     private lateinit var cachePort: CachePort
     private lateinit var kakaoOidcTokenVerificationHelper: KakaoOidcTokenVerificationHelper
     private lateinit var kakaoOidcIdTokenPayloadVerifier: KakaoOidcIdTokenPayloadVerifier
-    private lateinit var kakaoOidcIdTokenVerifier: KakaoOidcIdTokenVerifier
+    private lateinit var kakaoOIDCVerifier: KakaoOIDCVerifier
 
     @BeforeEach
     fun setUp() {
         cachePort = mockk()
         kakaoOidcTokenVerificationHelper = mockk()
         kakaoOidcIdTokenPayloadVerifier = mockk()
-        kakaoOidcIdTokenVerifier = KakaoOidcIdTokenVerifier(
+        kakaoOIDCVerifier = KakaoOIDCVerifier(
             cachePort,
             kakaoOidcTokenVerificationHelper,
             kakaoOidcIdTokenPayloadVerifier
@@ -62,7 +62,7 @@ class KakaoOidcIdTokenVerifierTest {
         } returns Unit
 
         // when & then (예외가 발생하지 않으면 성공)
-        kakaoOidcIdTokenVerifier.verifyIdTokenAndReturnUserEmail(idToken)
+        kakaoOIDCVerifier.verifyAndReturnEmail(idToken)
         verify(exactly = 1) { cachePort.find("KakaoPublicKey::kakaoPublicKeySet") }
         verify(exactly = 1) {
             kakaoOidcTokenVerificationHelper.getPayloadFromIdToken(
@@ -89,7 +89,7 @@ class KakaoOidcIdTokenVerifierTest {
 
         // when & then
         val exception = assertThrows(SecurityException::class.java) {
-            kakaoOidcIdTokenVerifier.verifyIdTokenAndReturnUserEmail(idToken)
+            kakaoOIDCVerifier.verifyAndReturnEmail(idToken)
         }
 
         assertEquals("공개키 캐시가 비어있습니다. 카카오 서버에 요청하여 초기화가 필요합니다.", exception.message)
@@ -129,7 +129,7 @@ class KakaoOidcIdTokenVerifierTest {
 
         // when & then
         val exception = assertThrows(SecurityException::class.java) {
-            kakaoOidcIdTokenVerifier.verifyIdTokenAndReturnUserEmail(idToken)
+            kakaoOIDCVerifier.verifyAndReturnEmail(idToken)
         }
 
         assertTrue(exception.message!!.contains("토큰의 issuer가 일치하지 않습니다"))
@@ -172,7 +172,7 @@ class KakaoOidcIdTokenVerifierTest {
 
         // when & then
         val exception = assertThrows(SecurityException::class.java) {
-            kakaoOidcIdTokenVerifier.verifyIdTokenAndReturnUserEmail(idToken)
+            kakaoOIDCVerifier.verifyAndReturnEmail(idToken)
         }
 
         assertTrue(exception.message!!.contains("토큰의 audience가 일치하지 않습니다"))
@@ -203,7 +203,7 @@ class KakaoOidcIdTokenVerifierTest {
 
         // when & then
         val exception = assertThrows(SecurityException::class.java) {
-            kakaoOidcIdTokenVerifier.verifyIdTokenAndReturnUserEmail(idToken)
+            kakaoOIDCVerifier.verifyAndReturnEmail(idToken)
         }
 
         assertTrue(exception.message!!.contains("ID 토큰 검증에 실패했습니다"))

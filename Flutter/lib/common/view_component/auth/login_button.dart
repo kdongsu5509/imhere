@@ -58,6 +58,7 @@ class LoginButton extends StatelessWidget {
     Color borderColor,
   ) {
     return ElevatedButton.styleFrom(
+      minimumSize: Size(width * 0.85, height * 0.06), // 최소 크기도 38.4로 설정
       maximumSize: Size(width * 0.85, height * 0.06),
       padding: EdgeInsets.zero,
       elevation: 0,

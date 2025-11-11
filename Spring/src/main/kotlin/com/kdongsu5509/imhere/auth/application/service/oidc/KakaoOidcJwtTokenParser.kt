@@ -1,30 +1,21 @@
-package com.kdongsu5509.imhere.auth.application.service
+package com.kdongsu5509.imhere.auth.application.service.oidc
 
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import io.jsonwebtoken.Claims
-import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwt
 import io.jsonwebtoken.Jwts
-import org.apache.commons.logging.LogFactory
 import org.springframework.stereotype.Component
-import java.math.BigInteger
-import java.security.Key
-import java.security.KeyFactory
-import java.security.NoSuchAlgorithmException
-import java.security.spec.InvalidKeySpecException
-import java.security.spec.RSAPublicKeySpec
-import java.util.*
 
 /**
  * 카카오 OIDC JWT 토큰 파서
  * 카카오 OIDC ID 토큰의 파싱만 담당합니다. 검증은 하지 않습니다.
- * 
+ *
  * 주요 기능:
  * - 토큰 구조 파싱 (헤더, 페이로드, 서명 분리)
  * - 서명되지 않은 토큰 헤더에서 kid 추출
  * - 페이로드 추출 (검증 없이)
- * 
+ *
  * @see KakaoOidcJwtTokenSignatureVerifier 토큰 서명 검증 담당
  */
 @Component
@@ -33,7 +24,7 @@ class KakaoOidcJwtTokenParser {
 
     /**
      * 서명되지 않은 토큰 헤더에서 kid(Key ID) 추출
-     * 
+     *
      * @param token 카카오 OIDC ID 토큰
      * @param iss 발급자 (issuer) - 검증용
      * @param aud 대상 (audience) - 검증용
@@ -45,7 +36,7 @@ class KakaoOidcJwtTokenParser {
 
     /**
      * 서명 없이 토큰의 헤더와 페이로드 파싱 (서명 검증 안함)
-     * 
+     *
      * @param token 카카오 OIDC ID 토큰
      * @param iss 발급자 (issuer) - 검증용
      * @param aud 대상 (audience) - 검증용
@@ -65,7 +56,7 @@ class KakaoOidcJwtTokenParser {
 
     /**
      * 토큰의 서명 부분을 제거하여 서명되지 않은 형태의 토큰 문자열 반환
-     * 
+     *
      * @param token 원본 토큰
      * @return 서명이 제거된 토큰 (header.payload.)
      */
@@ -79,7 +70,7 @@ class KakaoOidcJwtTokenParser {
 
     /**
      * 검증된 JWS 객체에서 페이로드 추출
-     * 
+     *
      * @param jws 검증된 JWS 객체
      * @return OIDCDecodePayload 객체
      */

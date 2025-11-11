@@ -1,19 +1,16 @@
-package com.kdongsu5509.imhere.auth.application.service
+package com.kdongsu5509.imhere.auth.application.service.oidc
 
-import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
-import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
 import java.time.Instant
 import java.util.*
 
-class KakaoOidcJwtTokenSignatureVerifierTest {
+class KakaoOidcSelfSignedJWTTokenSignatureVerifierTest {
 
     private lateinit var kakaoOidcJwtTokenSignatureVerifier: KakaoOidcJwtTokenSignatureVerifier
 

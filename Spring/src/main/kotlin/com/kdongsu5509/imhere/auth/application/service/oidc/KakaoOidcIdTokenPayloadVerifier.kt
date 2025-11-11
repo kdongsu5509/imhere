@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.application.service
+package com.kdongsu5509.imhere.auth.application.service.oidc
 
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import org.springframework.stereotype.Component

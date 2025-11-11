@@ -1,7 +1,6 @@
-package com.kdongsu5509.imhere.auth.application.service
+package com.kdongsu5509.imhere.auth.application.service.oidc
 
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
-import com.kdongsu5509.imhere.auth.application.port.`in`.VerifyIdTokenUseCase
 import com.kdongsu5509.imhere.auth.application.port.out.CachePort
 import io.jsonwebtoken.MalformedJwtException
 import org.springframework.stereotype.Service
@@ -21,17 +20,17 @@ import org.springframework.transaction.annotation.Transactional
  */
 @Service
 @Transactional
-class KakaoOidcIdTokenVerifier(
+class KakaoOIDCVerifier(
     private val cachePort: CachePort,
     private val kakaoOidcTokenVerificationHelper: KakaoOidcTokenVerificationHelper,
     private val kakaoOidcIdTokenPayloadVerifier: KakaoOidcIdTokenPayloadVerifier
-) : VerifyIdTokenUseCase {
+) {
 
     // 💡 검증에 필요한 상수 (카카오 문서 기반)
     companion object {
         private const val KAKAO_ISSUER = "https://kauth.kakao.com"
         private const val KAKAO_AUDIENCE = "bf284f33bfeba9bc59575706d0eb0e9c"
-        private const val CACHE_KEY = "KakaoPublicKey::kakaoPublicKeySet"
+        private const val CACHE_KEY = "kakaoOidcKeys::kakaoPublicKeySet"
     }
 
     /**
@@ -41,7 +40,7 @@ class KakaoOidcIdTokenVerifier(
      * @return 검증 성공 시 true 반환
      * @throws SecurityException 토큰 검증 실패 시 예외 발생
      */
-    override fun verifyIdTokenAndReturnUserEmail(idToken: String): String {
+    fun verifyAndReturnEmail(idToken: String): String {
         try {
             // 1. Redis 캐시에서 공개키 목록 조회
             val cachedKeySet = getCachedPublicKeys()

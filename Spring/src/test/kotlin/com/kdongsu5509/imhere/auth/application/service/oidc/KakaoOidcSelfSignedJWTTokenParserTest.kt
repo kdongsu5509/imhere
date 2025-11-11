@@ -1,19 +1,14 @@
-package com.kdongsu5509.imhere.auth.application.service
+package com.kdongsu5509.imhere.auth.application.service.oidc
 
-import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
-import io.jsonwebtoken.ExpiredJwtException
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
-import java.time.Instant
 import java.util.*
 
-class KakaoOidcJwtTokenParserTest {
+class KakaoOidcSelfSignedJWTTokenParserTest {
 
     private lateinit var kakaoOidcJwtTokenParser: KakaoOidcJwtTokenParser
 
@@ -82,7 +77,7 @@ class KakaoOidcJwtTokenParserTest {
         // given
         val idToken = TestJwtBuilder.buildValidIdToken()
         val (modulus, exponent) = getModulusAndExponent()
-        
+
         // 검증기를 통해 JWS 객체 생성
         val verifier = KakaoOidcJwtTokenSignatureVerifier()
         val jws = verifier.verifyTokenSignature(idToken, modulus, exponent)

@@ -13,7 +13,7 @@ class AuthService implements IAuthService {
   @override
   sendIdTokenToServer(String idToken) async {
     try {
-      await _dio.post('/auth/kakao', data: {'idToken': idToken});
+      await _dio.post('/api/v1/auth', data: {'provider': 'KAKAO','idToken': idToken});
     } on DioException catch (e) {
       throw Exception('자체 백엔드 서버에 토큰 전송 실패');
     }

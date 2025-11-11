@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.application.service
+package com.kdongsu5509.imhere.auth.application.service.oidc
 
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
@@ -9,7 +9,6 @@ import io.mockk.verify
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
 import java.util.*
@@ -113,7 +112,7 @@ class KakaoOidcTokenVerificationHelperTest {
         val idToken = TestJwtBuilder.buildValidIdToken()
         val iss = "https://kauth.kakao.com"
         val aud = "bf284f33bfeba9bc59575706d0eb0e9c"
-        
+
         val keyPair = TestJwtBuilder.keyPair
         val publicKey = keyPair.public
         val keyFactory = KeyFactory.getInstance("RSA")

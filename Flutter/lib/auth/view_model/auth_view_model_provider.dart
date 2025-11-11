@@ -5,12 +5,12 @@ import 'auth_view_model_interface.dart';
 
 part 'auth_view_model_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 AuthViewModel authViewModel(Ref ref) {
   return AuthViewModel(ref);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 IAuthViewModel authViewModelInterface(Ref ref) {
   return ref.watch(authViewModelProvider);
 }
