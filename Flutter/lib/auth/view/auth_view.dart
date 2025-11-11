@@ -21,12 +21,13 @@ class AuthView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             buildAppTitle(context),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             buildAppSubTitle(context),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.07),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.3),
             consistLoginButtons(context, ref),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             buildAuthorizationRequestDescription(context),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             consistAuthenticationElements(context),
@@ -62,8 +63,6 @@ class AuthView extends ConsumerWidget {
           buttonInfo: LoginInfoData.kakao,
           onPressed: viewModel.handleKakaoLogin,
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        LoginButton(buttonInfo: LoginInfoData.google, onPressed: () {}),
       ],
     );
   }
