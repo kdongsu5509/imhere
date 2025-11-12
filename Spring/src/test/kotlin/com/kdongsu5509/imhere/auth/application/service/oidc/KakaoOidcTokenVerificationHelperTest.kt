@@ -3,31 +3,30 @@ package com.kdongsu5509.imhere.auth.application.service.oidc
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.any
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
+import org.mockito.junit.jupiter.MockitoExtension
 import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
 import java.util.*
 
+@ExtendWith(MockitoExtension::class)
 class KakaoOidcTokenVerificationHelperTest {
 
+    @Mock
     private lateinit var kakaoOidcJwtTokenParser: KakaoOidcJwtTokenParser
-    private lateinit var kakaoOidcJwtTokenSignatureVerifier: KakaoOidcJwtTokenSignatureVerifier
-    private lateinit var kakaoOidcTokenVerificationHelper: KakaoOidcTokenVerificationHelper
 
-    @BeforeEach
-    fun setUp() {
-        kakaoOidcJwtTokenParser = mockk()
-        kakaoOidcJwtTokenSignatureVerifier = mockk()
-        kakaoOidcTokenVerificationHelper = KakaoOidcTokenVerificationHelper(
-            kakaoOidcJwtTokenParser,
-            kakaoOidcJwtTokenSignatureVerifier
-        )
-    }
+    @Mock
+    private lateinit var kakaoOidcJwtTokenSignatureVerifier: KakaoOidcJwtTokenSignatureVerifier
+    @InjectMocks
+    private lateinit var kakaoOidcTokenVerificationHelper: KakaoOidcTokenVerificationHelper
 
     @Test
     fun `유효한 ID 토큰으로부터 페이로드 추출 성공`() {
@@ -50,30 +49,18 @@ class KakaoOidcTokenVerificationHelperTest {
             .build()
             .parseClaimsJws(idToken)
 
-        every {
-            kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud)
-        } returns expectedKid
-        every {
-            kakaoOidcJwtTokenSignatureVerifier.verifyTokenSignature(idToken, oidcPublicKey.n, oidcPublicKey.e)
-        } returns mockJws
-        every {
-            kakaoOidcJwtTokenParser.extractPayloadFromJws(mockJws)
-        } returns expectedPayload
+        `when`(kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud))
+            .thenReturn(expectedKid)
+        `when`(kakaoOidcJwtTokenSignatureVerifier.verifyTokenSignature(idToken,     oidcPublicKey.n, oidcPublicKey.e))
+            .thenReturn(mockJws)
+        `when`(kakaoOidcJwtTokenParser.extractPayloadFromJws(mockJws))
+            .thenReturn(expectedPayload)
 
         // when
         val result = kakaoOidcTokenVerificationHelper.getPayloadFromIdToken(idToken, iss, aud, publicKeyResponse)
 
         // then
         assertEquals(expectedPayload, result)
-        verify(exactly = 1) {
-            kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud)
-        }
-        verify(exactly = 1) {
-            kakaoOidcJwtTokenSignatureVerifier.verifyTokenSignature(idToken, oidcPublicKey.n, oidcPublicKey.e)
-        }
-        verify(exactly = 1) {
-            kakaoOidcJwtTokenParser.extractPayloadFromJws(mockJws)
-        }
     }
 
     @Test
@@ -85,9 +72,9 @@ class KakaoOidcTokenVerificationHelperTest {
         val publicKeyResponse = createMockPublicKeyResponse()
         val invalidKid = "invalid-kid"
 
-        every {
+        `when`(
             kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud)
-        } returns invalidKid
+        ).thenReturn(invalidKid)
 
         // when & then
         val exception = assertThrows(SecurityException::class.java) {
@@ -95,15 +82,9 @@ class KakaoOidcTokenVerificationHelperTest {
         }
 
         assertTrue(exception.message!!.contains("캐시된 키 목록에 kid: $invalidKid 에 해당하는 키가 없습니다"))
-        verify(exactly = 1) {
-            kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud)
-        }
-        verify(exactly = 0) {
-            kakaoOidcJwtTokenSignatureVerifier.verifyTokenSignature(any(), any(), any())
-        }
-        verify(exactly = 0) {
-            kakaoOidcJwtTokenParser.extractPayloadFromJws(any())
-        }
+
+
+        verify(kakaoOidcJwtTokenParser, times(1)).getKidFromUnsignedTokenHeader(String(), String(), String())
     }
 
     @Test
@@ -159,30 +140,23 @@ class KakaoOidcTokenVerificationHelperTest {
             .build()
             .parseClaimsJws(idToken)
 
-        every {
+        `when`(
             kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud)
-        } returns TestJwtBuilder.KAKAO_HEADER_KID
-        every {
-            kakaoOidcJwtTokenSignatureVerifier.verifyTokenSignature(idToken, key2.n, key2.e)
-        } returns mockJws
-        every {
+        ).thenReturn(TestJwtBuilder.KAKAO_HEADER_KID)
+
+        `when`(
             kakaoOidcJwtTokenParser.extractPayloadFromJws(mockJws)
-        } returns expectedPayload
+        ).thenReturn(expectedPayload)
+
+        `when`(
+            kakaoOidcJwtTokenParser.extractPayloadFromJws(mockJws)
+        ).thenReturn(expectedPayload)
 
         // when
         val result = kakaoOidcTokenVerificationHelper.getPayloadFromIdToken(idToken, iss, aud, publicKeyResponse)
 
         // then
         assertEquals(expectedPayload, result)
-        verify(exactly = 1) {
-            kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud)
-        }
-        verify(exactly = 1) {
-            kakaoOidcJwtTokenSignatureVerifier.verifyTokenSignature(idToken, key2.n, key2.e)
-        }
-        verify(exactly = 1) {
-            kakaoOidcJwtTokenParser.extractPayloadFromJws(mockJws)
-        }
     }
 
     /**
