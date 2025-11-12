@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart'; // go_router import
+import 'package:go_router/go_router.dart';
+import 'package:iamhere/common/router/go_router.dart'; // go_router import
 
 // 📌 StatelessWidget으로 변경: 내부 상태(selectedIndex)를 제거하고 go_router에 의존
 class DefaultView extends StatelessWidget {
@@ -51,8 +52,7 @@ class DefaultView extends StatelessWidget {
           size: 28.sp, // 반응형 크기 적용
         ),
         onPressed: () {
-          // TODO: 새 지오펜스/연락처 추가 화면으로 이동 (예: context.push('/add-new'))
-          print("구현하자~~~~~~");
+          router.go("/geofence/enroll");
         },
       ),
     );
