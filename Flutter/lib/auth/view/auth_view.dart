@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iamhere/auth/view/component/login_button.dart';
+import 'package:iamhere/auth/view/component/login_button_info.dart';
+import 'package:iamhere/auth/view/component/right_content_widget.dart';
 import 'package:iamhere/auth/view_model/auth_view_model_provider.dart';
-import 'package:iamhere/common/view_component/auth/login_button.dart';
-import 'package:iamhere/common/view_component/auth/login_button_info.dart';
-import 'package:iamhere/common/view_component/auth/right_content_widget.dart';
 
 class AuthView extends ConsumerWidget {
   final String _appTitle = 'Imhere';
@@ -21,14 +22,15 @@ class AuthView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: 65.h),
             buildAppTitle(context),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            SizedBox(height: 6.h),
             buildAppSubTitle(context),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.07),
+            SizedBox(height: 270.h),
             consistLoginButtons(context, ref),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+            SizedBox(height: 40.h),
             buildAuthorizationRequestDescription(context),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            SizedBox(height: 10.h),
             consistAuthenticationElements(context),
           ],
         ),
@@ -39,18 +41,18 @@ class AuthView extends ConsumerWidget {
   Text buildAppTitle(BuildContext context) {
     return Text(
       _appTitle,
-      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-        fontSize: MediaQuery.of(context).size.width * 0.14,
-      ),
+      style: Theme.of(
+        context,
+      ).textTheme.headlineLarge?.copyWith(fontSize: 58.sp),
     );
   }
 
   Text buildAppSubTitle(BuildContext context) {
     return Text(
       _subTitle,
-      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-        fontSize: MediaQuery.of(context).size.width * 0.05,
-      ),
+      style: Theme.of(
+        context,
+      ).textTheme.headlineMedium?.copyWith(fontSize: 20.sp),
     );
   }
 
@@ -62,8 +64,6 @@ class AuthView extends ConsumerWidget {
           buttonInfo: LoginInfoData.kakao,
           onPressed: viewModel.handleKakaoLogin,
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        LoginButton(buttonInfo: LoginInfoData.google, onPressed: () {}),
       ],
     );
   }
