@@ -36,11 +36,11 @@ class RecordTile extends StatelessWidget {
      */
     return Card(
       color: tileBackgroundColor,
-      margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+      margin: EdgeInsets.symmetric(vertical: 8.h),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       elevation: 3,
       child: Padding(
-        padding: EdgeInsets.all(16.h), // 모든 패딩을 높이 기준으로 설정
+        padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 16.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
