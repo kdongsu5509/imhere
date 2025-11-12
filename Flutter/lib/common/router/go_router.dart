@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iamhere/common/view_component/default_view.dart';
 import 'package:iamhere/contact/view/contact_view.dart';
+import 'package:iamhere/geofence/view/geofence_enroll_view.dart';
 import 'package:iamhere/geofence/view/geofence_view.dart';
 import 'package:iamhere/record/view/record_view.dart';
 
@@ -30,6 +31,16 @@ final GoRouter router = GoRouter(
             state: state,
             child: const GeofenceView(),
           ),
+          routes: [
+            GoRoute(
+              path: '/enroll',
+              pageBuilder: (context, state) => buildPageWithBottomUpTransition(
+                context: context,
+                state: state,
+                child: const GeofenceEnrollView(),
+              ),
+            ),
+          ],
         ),
 
         // 2. 연락처 탭 경로

@@ -5,11 +5,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iamhere/common/router/go_router.dart';
 import 'package:iamhere/common/theme/im_here_them_data_light.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
 Future main() async {
   await dotenv.load(fileName: "iam_here_flutter_secret.env");
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY']);
+  print("카카오 SDK : ${KakaoSdk.appKey}");
+  await KakaoMapSdk.instance.initialize(
+    dotenv.env['KAKAO_NATIVE_APP_KEY_DEV']!,
+  );
+  var s = await KakaoMapSdk.instance.hashKey();
+  print("카카오 맵 HASHKEY $s");
   runApp(const ProviderScope(child: ImHereApp()));
 }
 
