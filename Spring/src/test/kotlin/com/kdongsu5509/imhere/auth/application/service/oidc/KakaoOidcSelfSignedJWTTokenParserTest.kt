@@ -1,5 +1,6 @@
 package com.kdongsu5509.imhere.auth.application.service.oidc
 
+import com.kdongsu5509.imhere.auth.adapter.out.jjwt.KakaoOidcJwtTokenParser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +26,7 @@ class KakaoOidcSelfSignedJWTTokenParserTest {
         val aud = TestJwtBuilder.KAKAO_PAYLOAD_AUD
 
         // when
-        val kid = kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud)
+        val kid = kakaoOidcJwtTokenParser.getKidFromOriginTokenHeader(idToken, iss, aud)
 
         // then
         assertEquals(TestJwtBuilder.KAKAO_HEADER_KID, kid)
@@ -40,7 +41,7 @@ class KakaoOidcSelfSignedJWTTokenParserTest {
 
         // when & then
         assertThrows(SecurityException::class.java) {
-            kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, invalidIss, aud)
+            kakaoOidcJwtTokenParser.getKidFromOriginTokenHeader(idToken, invalidIss, aud)
         }
     }
 
@@ -53,7 +54,7 @@ class KakaoOidcSelfSignedJWTTokenParserTest {
 
         // when & then
         assertThrows(SecurityException::class.java) {
-            kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, invalidAud)
+            kakaoOidcJwtTokenParser.getKidFromOriginTokenHeader(idToken, iss, invalidAud)
         }
     }
 
@@ -64,7 +65,7 @@ class KakaoOidcSelfSignedJWTTokenParserTest {
 
         // when & then
         assertThrows(SecurityException::class.java) {
-            kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(
+            kakaoOidcJwtTokenParser.getKidFromOriginTokenHeader(
                 invalidToken,
                 TestJwtBuilder.KAKAO_PAYLOAD_ISS,
                 TestJwtBuilder.KAKAO_PAYLOAD_AUD

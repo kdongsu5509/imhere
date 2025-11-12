@@ -2,11 +2,11 @@ package com.kdongsu5509.imhere.auth.application.service.oidc
 
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
+import com.kdongsu5509.imhere.auth.adapter.out.jjwt.KakaoOidcJwtTokenParser
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers.any
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.times
@@ -49,7 +49,7 @@ class KakaoOidcTokenVerificationHelperTest {
             .build()
             .parseClaimsJws(idToken)
 
-        `when`(kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud))
+        `when`(kakaoOidcJwtTokenParser.getKidFromOriginTokenHeader(idToken, iss, aud))
             .thenReturn(expectedKid)
         `when`(kakaoOidcJwtTokenSignatureVerifier.verifyTokenSignature(idToken,     oidcPublicKey.n, oidcPublicKey.e))
             .thenReturn(mockJws)
@@ -73,7 +73,7 @@ class KakaoOidcTokenVerificationHelperTest {
         val invalidKid = "invalid-kid"
 
         `when`(
-            kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud)
+            kakaoOidcJwtTokenParser.getKidFromOriginTokenHeader(idToken, iss, aud)
         ).thenReturn(invalidKid)
 
         // when & then
@@ -84,7 +84,7 @@ class KakaoOidcTokenVerificationHelperTest {
         assertTrue(exception.message!!.contains("캐시된 키 목록에 kid: $invalidKid 에 해당하는 키가 없습니다"))
 
 
-        verify(kakaoOidcJwtTokenParser, times(1)).getKidFromUnsignedTokenHeader(String(), String(), String())
+        verify(kakaoOidcJwtTokenParser, times(1)).getKidFromOriginTokenHeader(String(), String(), String())
     }
 
     @Test
@@ -141,7 +141,7 @@ class KakaoOidcTokenVerificationHelperTest {
             .parseClaimsJws(idToken)
 
         `when`(
-            kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(idToken, iss, aud)
+            kakaoOidcJwtTokenParser.getKidFromOriginTokenHeader(idToken, iss, aud)
         ).thenReturn(TestJwtBuilder.KAKAO_HEADER_KID)
 
         `when`(

@@ -2,6 +2,7 @@ package com.kdongsu5509.imhere.auth.application.service.oidc
 
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
+import com.kdongsu5509.imhere.auth.adapter.out.jjwt.KakaoOidcJwtTokenParser
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import org.springframework.stereotype.Component
 
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component
  * - 공개키를 사용한 토큰 서명 검증 (검증기 사용)
  * - 검증된 페이로드 추출 (파서 사용)
  *
- * @see KakaoOidcJwtTokenParser 토큰 파싱 담당
+ * @see com.kdongsu5509.imhere.auth.adapter.out.jjwt.KakaoOidcJwtTokenParser 토큰 파싱 담당
  * @see KakaoOidcJwtTokenSignatureVerifier 토큰 서명 검증 담당
  */
 @Component
@@ -41,7 +42,7 @@ class KakaoOidcTokenVerificationHelper(
         oidcPublicKeysResponse: OIDCPublicKeyResponse
     ): OIDCDecodePayload {
         // 1. 토큰 헤더에서 kid 추출 (파서 사용)
-        val kid = kakaoOidcJwtTokenParser.getKidFromUnsignedTokenHeader(token, iss, aud)
+        val kid = kakaoOidcJwtTokenParser.getKidFromOriginTokenHeader(token, iss, aud)
 
         // 2. 공개키 목록에서 kid에 해당하는 공개키 찾기
         val oidcPublicKey: OIDCPublicKey =

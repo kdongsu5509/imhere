@@ -1,0 +1,11 @@
+jwt:
+  secret: testsecretkey
+  accessExpirationMinutes: 1
+  refresh-expiration-days: 1
+  accessHeaderName: Authorization
+
+oidc:
+  kakao:
+    issuer: "https://kauth.kakao.com"
+    audience: "bf284f33bfeba9bc59575706d0eb0e9c"
+    cacheKey: "kakaoOidcKeys::kakaoPublicKeySet"

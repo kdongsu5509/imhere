@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.application.service.oidc
+package com.kdongsu5509.imhere.auth.adapter.out.jjwt
 
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import io.jsonwebtoken.Claims
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
  * - 서명되지 않은 토큰 헤더에서 kid 추출
  * - 페이로드 추출 (검증 없이)
  *
- * @see KakaoOidcJwtTokenSignatureVerifier 토큰 서명 검증 담당
+ * @see com.kdongsu5509.imhere.auth.application.service.oidc.KakaoOidcJwtTokenSignatureVerifier 토큰 서명 검증 담당
  */
 @Component
 class KakaoOidcJwtTokenParser {
@@ -30,28 +30,13 @@ class KakaoOidcJwtTokenParser {
      * @param aud 대상 (audience) - 검증용
      * @return kid 값
      */
-    fun getKidFromUnsignedTokenHeader(token: String, iss: String, aud: String): String {
-        return parseUnsignedTokenClaims(token, iss, aud).header[KID] as String
-    }
-
-    /**
-     * 서명 없이 토큰의 헤더와 페이로드 파싱 (서명 검증 안함)
-     *
-     * @param token 카카오 OIDC ID 토큰
-     * @param iss 발급자 (issuer) - 검증용
-     * @param aud 대상 (audience) - 검증용
-     * @return 파싱된 JWT 객체
-     */
-    private fun parseUnsignedTokenClaims(token: String, iss: String, aud: String): Jwt<*, Claims> {
-        return try {
-            Jwts.parserBuilder()
-                .requireAudience(aud)
-                .requireIssuer(iss)
-                .build()
-                .parseClaimsJwt(getUnsignedToken(token))
-        } catch (e: Exception) {
-            throw SecurityException("토큰 파싱에 실패했습니다. (${e.message})", e)
-        }
+    fun getKidFromOriginTokenHeader(token: String, iss: String, aud: String): String {
+        val parseClaimsJwt = Jwts.parserBuilder()
+            .requireAudience(aud)
+            .requireIssuer(iss)
+            .build()
+            .parseClaimsJwt(getUnsignedToken(token))
+        return parseClaimsJwt.header[KID] as String
     }
 
     /**

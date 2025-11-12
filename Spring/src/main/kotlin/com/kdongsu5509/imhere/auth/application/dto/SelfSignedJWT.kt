@@ -1,6 +1,6 @@
 package com.kdongsu5509.imhere.auth.application.dto
 
-import com.kdongsu5509.imhere.auth.adapter.dto.ImhereJwt
+import com.kdongsu5509.imhere.auth.adapter.dto.resp.ImhereJwt
 
 data class SelfSignedJWT(
     val accessToken: String,

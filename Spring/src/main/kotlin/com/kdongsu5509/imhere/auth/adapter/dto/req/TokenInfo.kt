@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.adapter.dto
+package com.kdongsu5509.imhere.auth.adapter.dto.req
 
 import com.kdongsu5509.imhere.auth.domain.OAuth2Provider
 

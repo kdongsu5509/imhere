@@ -9,7 +9,7 @@ import com.kdongsu5509.imhere.auth.application.port.out.CheckUserPort
 import com.kdongsu5509.imhere.auth.application.port.out.LoadUserPort
 import com.kdongsu5509.imhere.auth.application.port.out.SaveUserPort
 import com.kdongsu5509.imhere.auth.application.service.jwt.JwtTokenProvider
-import com.kdongsu5509.imhere.auth.application.service.oidc.`interface`.OIDCVerifier
+import com.kdongsu5509.imhere.auth.application.port.out.OIDCVerificationPort
 import com.kdongsu5509.imhere.auth.domain.OAuth2Provider
 import com.kdongsu5509.imhere.auth.domain.User
 import com.kdongsu5509.imhere.auth.domain.UserRole
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service
 @Service
 @Transactional
 class OIDCLoginFacade(
-    private val oidcVerifier: OIDCVerifier,
+    private val oidcVerificationPort: OIDCVerificationPort,
     private val checkUserPort: CheckUserPort,
     private val jwtTokenProvider: JwtTokenProvider,
     private val saveUserPort: SaveUserPort,
@@ -31,7 +31,7 @@ class OIDCLoginFacade(
     }
 
     override fun verify(oidc: String, oAuth2Provider: OAuth2Provider): UserInformation {
-        return oidcVerifier.verifyAndReturnUserInformation(oidc)
+        return oidcVerificationPort.verifyAndReturnUserInformation(oidc)
     }
 
     override fun issue(email: String, oauth2Provider: OAuth2Provider): SelfSignedJWT {

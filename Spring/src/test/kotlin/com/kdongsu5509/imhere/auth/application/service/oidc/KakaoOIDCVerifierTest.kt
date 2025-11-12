@@ -4,6 +4,7 @@ import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import com.kdongsu5509.imhere.auth.application.port.out.CachePort
+import com.kdongsu5509.imhere.auth.application.service.oidc.kakao.KakaoOIDCVerificationService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith // ✅ MockitoExtension 사용을 위해 추가
@@ -35,7 +36,7 @@ class KakaoOIDCVerifierTest {
 
     // Mock 객체들을 주입받아 테스트 대상 객체 생성
     @InjectMocks
-    private lateinit var kakaoOIDCVerifier: KakaoOIDCVerifier
+    private lateinit var kakaoOIDCVerifier: KakaoOIDCVerificationService
 
     @Test
     fun `유효한 ID 토큰 검증 성공`() {
