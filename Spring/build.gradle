@@ -4,6 +4,7 @@ plugins {
     id 'org.springframework.boot' version '3.5.7'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
+    id 'jacoco'
 }
 
 group = 'com.kdongsu5509'
@@ -48,7 +49,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
-    testImplementation 'io.mockk:mockk:1.13.10'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -67,4 +67,76 @@ allOpen {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+/**
+ * JaCoCo Code Coverage 설정
+ */
+jacoco {
+    toolVersion = "0.8.13"
+    reportsDirectory = layout.buildDirectory.dir("reports/jacoco").get().asFile
+}
+jacocoTestReport {
+
+    reports {
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+        xml.required = false
+        csv.required = false
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                classDirectories.files.collect { file ->
+                    fileTree(dir: file, exclude: ['**/*Application*',
+                                                  '**/*Config*',
+                                                  '**/*Dto*',
+                                                  '**/*Vo*',
+                                                  '**/*Entity*']
+                    )
+                })
+    }
+
+    dependsOn test
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+
+            element = 'CLASS' // 클래스 단위로 검증
+
+            // 브랜치 커버리지를 최소 90% 로 설정
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.90
+            }
+
+            //라인 커버리지를 최소 90%로 설정
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = BigDecimal.valueOf(0.9) // 90% coverage 로 설정
+            }
+
+            //빈 줄을 제외한 코드의 라인 수를 최대 150으로 제한
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = BigDecimal.valueOf(150)
+            }
+        }
+    }
+
+    dependsOn test
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+
+    jacoco {
+        destinationFile = file("$buildDir/jacoco/jacoco.exec")
+    }
+    finalizedBy jacocoTestReport // report is always generated after tests
 }
