@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iamhere/common/view_component/FlexibleScreen.dart';
-import 'package:iamhere/common/view_component/auth/login_button_info.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iamhere/auth/view/component/login_button_info.dart';
 
 class LoginButton extends StatelessWidget {
   final LoginButtonInfo buttonInfo;
@@ -13,53 +13,45 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = FlexibleScreen.getWidth(context);
-    final height = FlexibleScreen.getHeight(context);
-
     final Color borderColor = borderColorSelector();
 
     return ElevatedButton(
       onPressed: onPressed,
-      style: buildLoginButtonStyle(width, height, borderColor),
+      style: buildLoginButtonStyle(borderColor),
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            loginButtonIcon(height),
-            SizedBox(width: width * 0.04),
-            providerDescription(context, width),
-            SizedBox(width: width * 0.02 + height * 0.02),
+            loginButtonIcon(),
+            SizedBox(width: 20.w),
+            providerDescription(context),
+            SizedBox(width: 5.w),
           ],
         ),
       ),
     );
   }
 
-  Image loginButtonIcon(double height) {
-    return Image.asset(
-      buttonInfo.assetAddress,
-      width: height * 0.02,
-      height: height * 0.02,
-    );
+  Image loginButtonIcon() {
+    return Image.asset(buttonInfo.assetAddress, width: 30.w, height: 30.h);
   }
 
-  Text providerDescription(BuildContext context, double width) {
+  Text providerDescription(BuildContext context) {
     return Text(
       buttonInfo.description,
       style: Theme.of(
         context,
-      ).textTheme.headlineMedium?.copyWith(fontSize: width * 0.05),
+      ).textTheme.headlineMedium?.copyWith(fontSize: 20.sp),
     );
   }
 
-  ButtonStyle buildLoginButtonStyle(
-    double width,
-    double height,
-    Color borderColor,
-  ) {
+  ButtonStyle buildLoginButtonStyle(Color borderColor) {
+    final _width = 350.w;
+    final _height = 50.h;
+
     return ElevatedButton.styleFrom(
-      minimumSize: Size(width * 0.85, height * 0.06), // 최소 크기도 38.4로 설정
-      maximumSize: Size(width * 0.85, height * 0.06),
+      minimumSize: Size(_width, _height), // 최소 크기도 38.4로 설정
+      maximumSize: Size(_width, _height),
       padding: EdgeInsets.zero,
       elevation: 0,
       backgroundColor: buttonInfo.backgroundColor,

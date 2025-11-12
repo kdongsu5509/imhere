@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:iamhere/friends/view/friends_view.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iamhere/contact/view/contact_view.dart';
 import 'package:iamhere/geofence/view/geofence_view.dart';
 import 'package:iamhere/record/view/record_view.dart';
 
 class DefaultView extends StatefulWidget {
-  final Widget child;
-  const DefaultView({super.key, required this.child});
+  const DefaultView({super.key});
 
   @override
   State<DefaultView> createState() => _DefaultViewState();
@@ -18,7 +18,7 @@ class _DefaultViewState extends State<DefaultView> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const Center(child: GeofenceView()),
-    const Center(child: FriendsView()),
+    const Center(child: ContactView()),
     const Center(child: RecordView()),
   ];
 
@@ -62,16 +62,20 @@ class _DefaultViewState extends State<DefaultView> {
         centerTitle: false,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
+        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
         titleSpacing: 0,
         title: Padding(
-          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
+          padding: EdgeInsets.all(15.w),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildImHereAsTitle(context, theme),
-              _buildAppBarButton(theme),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.logout_outlined),
+              ),
             ],
           ),
         ),
@@ -83,29 +87,15 @@ class _DefaultViewState extends State<DefaultView> {
     return Text(
       _appTitle,
       style: theme.textTheme.headlineLarge?.copyWith(
-        fontSize: MediaQuery.of(context).size.width * 0.075,
+        fontSize: 35.sp,
         fontWeight: FontWeight.bold,
       ),
     );
   }
 
-  Row _buildAppBarButton(ThemeData theme) {
-    return Row(
-      children: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.dark_mode_outlined),
-        ),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.logout_outlined)),
-      ],
-    );
-  }
-
   Padding _buildBodyWithPadding(BuildContext context, Widget bodyWidget) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.04,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: Column(
         children: [
           const Divider(height: 1, thickness: 0.5, color: Colors.grey),
