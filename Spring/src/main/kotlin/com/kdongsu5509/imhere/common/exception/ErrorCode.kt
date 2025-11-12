@@ -13,11 +13,16 @@ enum class ErrorCode(
     KAKAO_OIDC_PUBLIC_KEY_FETCH_FAILED(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "AUTH_001_KAKAO",
-        "카카오 OIDC 공개 키를 가져오는데 실패했습니다."
+        "카카오 서버에서 OIDC 공개 키를 가져오는데 실패했습니다."
+    ),
+    KAKAO_OIDC_PUBLIC_KEY_FETCH_FROM_REDIS_FAILED(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "AUTH_002_KAKAO",
+        "Redis에서 OIDC 공개 키를 가져오는데 실패했습니다."
     ),
     KAKAO_OIDC_ID_TOKEN_INVALID(
         HttpStatus.UNAUTHORIZED,
-        "AUTH_002_KAKAO",
+        "AUTH_003_KAKAO",
         "카카오 OIDC ID 토큰이 유효하지 않습니다."
     ),
     /**
