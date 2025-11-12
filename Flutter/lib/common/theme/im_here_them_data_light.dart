@@ -7,6 +7,9 @@ final ThemeData lightTheme = ThemeData(
   // Scaffolf(앱 화면)의 기본 배경색
   scaffoldBackgroundColor: Colors.white,
 
+  splashColor: Colors.transparent,
+  highlightColor: Colors.transparent,
+
   // **2. 색상 구성표 (ColorScheme)**
   colorScheme:
       ColorScheme.fromSwatch(

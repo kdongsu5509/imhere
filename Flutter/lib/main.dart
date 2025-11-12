@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iamhere/common/router/go_router.dart';
 import 'package:iamhere/common/theme/im_here_them_data_light.dart';
-import 'package:iamhere/common/view_component/default_view.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 Future main() async {
@@ -28,10 +28,10 @@ class _ImHereAppState extends State<ImHereApp> {
       minTextAdapt: true, // 작은 화면에서 텍스트 크기 조절 허용
       splitScreenMode: true, // 멀티 윈도우 지원
       builder: (context, child) {
-        return MaterialApp(
+        return MaterialApp.router(
           title: 'ImHere App Dev',
           theme: lightTheme,
-          home: DefaultView(),
+          routerConfig: router,
         );
       },
     );
