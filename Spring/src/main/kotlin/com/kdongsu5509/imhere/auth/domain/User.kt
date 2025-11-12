@@ -6,12 +6,4 @@ data class User(
     var email: String,
     var oauthProvider: OAuth2Provider,
     var role: UserRole
-) {
-    fun toUserEntity(): UserJpaEntity {
-        return UserJpaEntity(
-            this.email,
-            this.role,
-            this.oauthProvider
-        )
-    }
-}
+)
