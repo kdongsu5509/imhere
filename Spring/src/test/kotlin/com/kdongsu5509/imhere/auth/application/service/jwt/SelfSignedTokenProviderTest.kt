@@ -7,10 +7,12 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import java.time.Duration
 
 @ExtendWith(MockitoExtension::class)
 class SelfSignedTokenProviderTest {
@@ -95,15 +97,18 @@ class SelfSignedTokenProviderTest {
         verify(jwtTokenIssuer).createAccessToken(username, role)
         verify(jwtTokenIssuer).createRefreshToken(username, role)
         verify(jwtTokenUtil).getExpirationDateFromToken(newRefreshToken)
-//
-//        val keyCaptor: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
-//        val valueCaptor: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
-//        val durationCaptor: ArgumentCaptor<Duration> = ArgumentCaptor.forClass(Duration::class.java)
-//        verify(cachePort).save(keyCaptor.capture(), valueCaptor.capture(), durationCaptor.capture())
-//        assertThat(keyCaptor.value).isEqualTo("refresh:$username")
-//        assertThat(valueCaptor.value).isEqualTo(newRefreshToken)
-//        assertThat(durationCaptor.value).isNotNull()
+
+        val keyCaptor: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
+        val valueCaptor: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
+        val durationCaptor: ArgumentCaptor<Duration> = ArgumentCaptor.forClass(Duration::class.java)
+        verify(cachePort).save(capture(keyCaptor), capture(valueCaptor), capture(durationCaptor))
+        assertThat(keyCaptor.value).isEqualTo("refresh:$username")
+        assertThat(valueCaptor.value).isEqualTo(newRefreshToken)
+        assertThat(durationCaptor.value).isNotNull()
     }
+
+    fun <T> capture(captor: ArgumentCaptor<T>): T = captor.capture()
+
 
     @Test
     @DisplayName("유효하지 않은 리프레시 토큰으로 재발급 시 예외가 발생한다")
