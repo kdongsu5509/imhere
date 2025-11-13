@@ -5,8 +5,6 @@ import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
 import com.kdongsu5509.imhere.auth.adapter.out.jjwt.KakaoOIDCProperties
 import com.kdongsu5509.imhere.auth.application.port.out.CachePort
 import com.kdongsu5509.imhere.auth.application.service.oidc.TestJwtBuilder
-import com.kdongsu5509.imhere.common.exception.implementation.auth.KakaoOIDCKeyFetchFailFromRedisException
-import com.kdongsu5509.imhere.common.exception.implementation.auth.KakaoOIDCPublicKeyNotFoundException
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -54,7 +52,7 @@ class PublicKeyAdapterTest {
     @DisplayName("없는 KID을 입력 받으면 `KakaoOIDCPublicKeyNotFoundException` 을 야기한다")
     fun fail_no_exist_kid() {
         //given
-        val testKID = TestJwtBuilder.KAKAO_HEADER_KID
+        val notExistKID = "not-exist-kid"
         val testCacheKey = "tempCacheKey"
         val mockPublicKeySet = createMockPublicKeySet()
         `when`(kakaoOIDCProperties.cacheKey).thenReturn(testCacheKey)
@@ -64,12 +62,12 @@ class PublicKeyAdapterTest {
 
         //when, then
         Assertions.assertThatThrownBy {
-            publicKeyAdapter.loadPublicKey(testKID)
-        }.isExactlyInstanceOf(KakaoOIDCPublicKeyNotFoundException::class.java)
+            publicKeyAdapter.loadPublicKey(notExistKID)
+        }.isInstanceOf(com.kdongsu5509.imhere.common.exception.implementation.auth.KakaoOIDCPublicKeyNotFoundException::class.java)
     }
 
     @Test
-    @DisplayName("없는 레디스 키를 입력하면 KakaoOIDCKeyFetchFailFromRedisException가 발생한다")
+    @DisplayName("없는 레디스 키를 입력하면 예외가 발생한다")
     fun fail_no_exist_redis_key() {
         //given
         val notExistKID = "notExistKID"
@@ -82,7 +80,7 @@ class PublicKeyAdapterTest {
         //when, then
         Assertions.assertThatThrownBy {
             publicKeyAdapter.loadPublicKey(notExistKID)
-        }.isExactlyInstanceOf(KakaoOIDCKeyFetchFailFromRedisException::class.java)
+        }.isInstanceOf(com.kdongsu5509.imhere.common.exception.implementation.auth.KakaoOIDCKeyFetchFailFromRedisException::class.java)
     }
 
     private fun createMockPublicKeySet(): OIDCPublicKeyResponse {

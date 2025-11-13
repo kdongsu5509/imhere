@@ -33,7 +33,7 @@ class JjwtParserAdapter(
         return loadPublicKeyPort.loadPublicKey(kidFromOriginTokenHeader)
     }
 
-    private fun getKidFromOriginTokenHeader(token: String): String {
+    fun getKidFromOriginTokenHeader(token: String): String {
         val kakaoIss = kakaoOIDCProperties.issuer
         val kakaoAud = kakaoOIDCProperties.audience
         val parseClaimsJwt = Jwts.parserBuilder()
