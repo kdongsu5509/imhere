@@ -24,11 +24,11 @@ class JwtAuthenticationFilter(
         private const val AUTH_HEADER = "Authorization"
     }
 
-    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+    public override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         return request.servletPath.startsWith("/actuator")
     }
 
-    override fun doFilterInternal(
+    public override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
