@@ -29,12 +29,4 @@ class UserJpaEntity {
     }
 
     protected constructor()
-
-    fun toUser(): User {
-        return User(
-            this.email,
-            this.provider,
-            this.role
-        )
-    }
 }

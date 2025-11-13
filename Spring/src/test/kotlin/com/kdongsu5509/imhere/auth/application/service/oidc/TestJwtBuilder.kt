@@ -13,13 +13,12 @@ import java.util.*
 
 object TestJwtBuilder {
 
-    // (상수 정의는 이전과 동일)
     const val KAKAO_HEADER_ALG = "RS256"
     const val KAKAO_HEADER_TYP = "JWT"
     const val KAKAO_HEADER_KID = "test-kid"
 
     const val KAKAO_PAYLOAD_ISS = "https://kauth.kakao.com"
-    const val KAKAO_PAYLOAD_AUD = "bf284f33bfeba9bc59575706d0eb0e9c" // 실제 서비스에서 사용하는 값과 일치
+    const val KAKAO_PAYLOAD_AUD = "bf284f33bfeba9bc59575706d0eb0e9c" // 테스트용 앱 키
     const val KAKAO_PAYLOAD_SUB = "사용자회원번호"
     const val KAKAO_PAYLOAD_EMAIL = "ds.ko@kakao.com"
     const val KAKAO_PAYLOAD_EXP_SECONDS = 3600L
