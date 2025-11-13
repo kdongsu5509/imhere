@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.application.service
+package com.kdongsu5509.imhere.auth.application.service.oidc
 
 import com.kdongsu5509.imhere.auth.application.dto.SelfSignedJWT
 import com.kdongsu5509.imhere.auth.application.dto.UserInformation
@@ -7,9 +7,9 @@ import com.kdongsu5509.imhere.auth.application.port.`in`.IssueJWTPort
 import com.kdongsu5509.imhere.auth.application.port.`in`.VerifyOIDCPort
 import com.kdongsu5509.imhere.auth.application.port.out.CheckUserPort
 import com.kdongsu5509.imhere.auth.application.port.out.LoadUserPort
+import com.kdongsu5509.imhere.auth.application.port.out.OIDCVerificationPort
 import com.kdongsu5509.imhere.auth.application.port.out.SaveUserPort
 import com.kdongsu5509.imhere.auth.application.service.jwt.JwtTokenProvider
-import com.kdongsu5509.imhere.auth.application.port.out.OIDCVerificationPort
 import com.kdongsu5509.imhere.auth.domain.OAuth2Provider
 import com.kdongsu5509.imhere.auth.domain.User
 import com.kdongsu5509.imhere.auth.domain.UserRole

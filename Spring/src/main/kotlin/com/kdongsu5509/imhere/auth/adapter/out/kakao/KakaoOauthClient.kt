@@ -10,8 +10,7 @@ import org.springframework.web.client.RestClient
 @Component
 class KakaoOauthClient(private val restClientBuilder: RestClient.Builder) : OauthClientPort {
     private val kakaoBaseUrl = "https://kauth.kakao.com"
-    private val publicKeyRequstSpecificUrl: String = "/.well-known/jwks.json"
-    private val metadataUrl = "https://kauth.kakao.com/.well-known/openid-configuration"
+    private val publicKeyRequestSpecificUrl: String = "/.well-known/jwks.json"
 
     private val log = LoggerFactory.getLogger(OauthClientPort::class.java)
 
@@ -21,7 +20,7 @@ class KakaoOauthClient(private val restClientBuilder: RestClient.Builder) : Oaut
 
         log.info("카카오 공개키 요청 준비 완료")
         val kakaoKeySet: OIDCPublicKeyResponse? = webClient.get()
-            .uri(publicKeyRequstSpecificUrl)
+            .uri(publicKeyRequestSpecificUrl)
             .retrieve()
             .body(OIDCPublicKeyResponse::class.java)
 
