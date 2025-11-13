@@ -2,16 +2,13 @@ package com.kdongsu5509.imhere.auth.application.service.oidc
 
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
-import com.kdongsu5509.imhere.auth.adapter.out.jjwt.KakaoOidcJwtTokenParser
 import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
 import java.security.KeyFactory
 import java.security.spec.RSAPublicKeySpec
@@ -25,6 +22,7 @@ class KakaoOidcTokenVerificationHelperTest {
 
     @Mock
     private lateinit var kakaoOidcJwtTokenSignatureVerifier: KakaoOidcJwtTokenSignatureVerifier
+
     @InjectMocks
     private lateinit var kakaoOidcTokenVerificationHelper: KakaoOidcTokenVerificationHelper
 
@@ -51,7 +49,7 @@ class KakaoOidcTokenVerificationHelperTest {
 
         `when`(kakaoOidcJwtTokenParser.getKidFromOriginTokenHeader(idToken, iss, aud))
             .thenReturn(expectedKid)
-        `when`(kakaoOidcJwtTokenSignatureVerifier.verifyTokenSignature(idToken,     oidcPublicKey.n, oidcPublicKey.e))
+        `when`(kakaoOidcJwtTokenSignatureVerifier.verifyTokenSignature(idToken, oidcPublicKey.n, oidcPublicKey.e))
             .thenReturn(mockJws)
         `when`(kakaoOidcJwtTokenParser.extractPayloadFromJws(mockJws))
             .thenReturn(expectedPayload)

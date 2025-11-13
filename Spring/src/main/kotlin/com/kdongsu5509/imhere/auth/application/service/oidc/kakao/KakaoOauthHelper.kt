@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.auth.application.service.oidc
+package com.kdongsu5509.imhere.auth.application.service.oidc.kakao
 
 //class KakaoOauthHelper {
 //    // 7. ID 토큰에서 OauthInfo 추출

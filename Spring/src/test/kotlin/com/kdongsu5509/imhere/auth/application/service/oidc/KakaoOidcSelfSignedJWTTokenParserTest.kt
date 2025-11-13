@@ -1,6 +1,5 @@
 package com.kdongsu5509.imhere.auth.application.service.oidc
 
-import com.kdongsu5509.imhere.auth.adapter.out.jjwt.KakaoOidcJwtTokenParser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach

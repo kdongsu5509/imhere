@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 import java.time.Duration
 
 @Service
-class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) : CachePort {
+class RedisCacheAdapter(private val redisTemplate: RedisTemplate<String, Any>) : CachePort {
     override fun save(key: String, data: Any, duration: Duration) {
         val ops = redisTemplate.opsForValue()
         ops.set(key, data, duration)

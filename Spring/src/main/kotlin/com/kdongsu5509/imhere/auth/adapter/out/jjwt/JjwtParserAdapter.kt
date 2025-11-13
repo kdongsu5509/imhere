@@ -1,29 +1,64 @@
 package com.kdongsu5509.imhere.auth.adapter.out.jjwt
 
-import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKeyResponse
-import com.kdongsu5509.imhere.auth.adapter.out.kakao.KakaoOIDCProperties
-import com.kdongsu5509.imhere.auth.application.port.out.CachePort
+import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
+import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import com.kdongsu5509.imhere.auth.application.port.out.JwtParserPort
-import com.kdongsu5509.imhere.common.exception.implementation.auth.KakaoOIDCKeyFetchFailFromRedisException
+import com.kdongsu5509.imhere.auth.application.port.out.JwtVerficationPort
+import com.kdongsu5509.imhere.auth.application.port.out.LoadPublicKeyPort
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.Jws
+import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
 
 @Component
 class JjwtParserAdapter(
-    private val cachePort: CachePort,
+    private val loadPublicKeyPort: LoadPublicKeyPort,
     private val kakaoOIDCProperties: KakaoOIDCProperties,
-    private val kakaoOidcJwtTokenParser: KakaoOidcJwtTokenParser
-): JwtParserPort {
-    /**
-     * TODO: JJWT 라이브러리를 사용하여 JWT 파싱 로직 구현
-     * 공개키를 사용하여 JWT를 검증해야만, 안전하게 토큰을 파싱할 수 있습니다.
-     */
-    override fun parse(idToken: String) {
+    private val jwtVerficationPort: JwtVerficationPort
+) : JwtParserPort {
+    override fun parse(idToken: String): OIDCDecodePayload {
+        val oidcPublicKey: OIDCPublicKey = findProperOIDCPublicKey(idToken)
 
+        val jws = jwtVerficationPort.verifySignature(
+            idToken,
+            oidcPublicKey.n,
+            oidcPublicKey.e
+        )
+
+        return extractPayloadFromJws(jws)
     }
 
-    private fun getCachedPublicKeys(): OIDCPublicKeyResponse {
-        val cachedKeySet = cachePort.find(kakaoOIDCProperties.cacheKey) as? OIDCPublicKeyResponse
-            ?: throw KakaoOIDCKeyFetchFailFromRedisException()
-        return cachedKeySet
+    private fun findProperOIDCPublicKey(idToken: String): OIDCPublicKey {
+        val kidFromOriginTokenHeader = getKidFromOriginTokenHeader(idToken)
+        return loadPublicKeyPort.loadPublicKey(kidFromOriginTokenHeader)
+    }
+
+    private fun getKidFromOriginTokenHeader(token: String): String {
+        val kakaoIss = kakaoOIDCProperties.issuer
+        val kakaoAud = kakaoOIDCProperties.audience
+        val parseClaimsJwt = Jwts.parserBuilder()
+            .requireAudience(kakaoAud)
+            .requireIssuer(kakaoIss)
+            .build()
+            .parseClaimsJwt(getUnsignedToken(token))
+        return parseClaimsJwt.header["kid"] as String
+    }
+
+    private fun getUnsignedToken(token: String): String {
+        val splitToken = token.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        if (splitToken.size != 3) {
+            throw SecurityException("토큰 형식이 올바르지 않습니다. (header.payload.signature 형식이어야 합니다.)")
+        }
+        return "${splitToken[0]}.${splitToken[1]}."
+    }
+
+    private fun extractPayloadFromJws(jws: Jws<Claims>): OIDCDecodePayload {
+        val body = jws.body
+        return OIDCDecodePayload(
+            iss = body.issuer,
+            aud = body.audience,
+            sub = body.subject,
+            email = body.get("email", String::class.java)
+        )
     }
 }
