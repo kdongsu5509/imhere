@@ -11,6 +11,6 @@ AuthViewModel authViewModel(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
-IAuthViewModel authViewModelInterface(Ref ref) {
+AuthViewModelInterface authViewModelInterface(Ref ref) {
   return ref.watch(authViewModelProvider);
 }

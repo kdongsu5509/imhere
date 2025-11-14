@@ -1,3 +1,3 @@
-abstract class IAuthService {
+abstract class AuthServiceInterface {
   sendIdTokenToServer(String idToken);
 }

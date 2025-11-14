@@ -11,6 +11,6 @@ AuthService authService(Ref ref) {
 
 // UI/ViewModel이 사용할 IAuthService 인터페이스 Provider
 @riverpod
-IAuthService authServiceInterface(Ref ref) {
+AuthServiceInterface authServiceInterface(Ref ref) {
   return ref.watch(authServiceProvider);
 }
