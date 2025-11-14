@@ -15,13 +15,6 @@ class ContactTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ❌ 불필요한 MediaQuery 계산 변수 제거
-    // final double screenWidth = MediaQuery.of(context).size.width;
-    // final double screenHeight = MediaQuery.of(context).size.height;
-    // final double borderRadius = FlexibleScreen.getWidth(context) * 0.05;
-
-    // 💡 모든 크기, 패딩, 폰트는 .w, .h, .sp를 사용합니다.
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -30,7 +23,7 @@ class ContactTile extends StatelessWidget {
         ), // 20px radius를 반응형으로 (.r)
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1.r,
             blurRadius: 5.r,
             offset: Offset(0, 3.h), // 높이 기준으로 그림자 오프셋 설정

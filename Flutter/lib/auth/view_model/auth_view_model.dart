@@ -6,7 +6,7 @@ import 'package:iamhere/auth/model/auth_service_provider.dart';
 import 'package:iamhere/auth/view_model/auth_view_model_interface.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-class AuthViewModel implements IAuthViewModel {
+class AuthViewModel implements AuthViewModelInterface {
   final Ref _ref;
 
   AuthViewModel(this._ref) : super();
