@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅ ScreenUtil import
 // import 'package:iamhere/common/view_component/FlexibleScreen.dart'; // ❌ FlexibleScreen 제거
 import 'package:iamhere/common/view_component/page_title.dart';
 import 'package:iamhere/contact/view/component/contact_tile.dart';
+import 'package:iamhere/contact/view_model/contact_view_model_provider.dart';
 
-class ContactView extends StatelessWidget {
+class ContactView extends ConsumerStatefulWidget {
   const ContactView({super.key});
 
-  // 임시 데이터 리스트 (실제로는 서버 또는 연락처 API에서 불러옴)
+  @override
+  ConsumerState<ContactView> createState() => _ContactViewState();
+}
+
+class _ContactViewState extends ConsumerState<ContactView> {
   final List<Map<String, String>> _contactList = const [
     {"name": "고동수", "phone": "01073512781"},
     {"name": "프로젝트 개발자A", "phone": "01011112222"},
@@ -31,7 +37,7 @@ class ContactView extends StatelessWidget {
           pageTitle: pageTitle,
           pageDescription: pageDescription,
           pageInfoCount: pageInfoCount,
-          additionalWidget: _buildImportButton(context), // 함수 이름 변경
+          additionalWidget: _buildContactImportButton(context),
           interval:
               2, // 이 interval 값은 FlexibleScreen을 가정하고 있으므로, PageTitle 내부도 ScreenUtil로 수정해야 합니다.
         ),
@@ -57,7 +63,8 @@ class ContactView extends StatelessWidget {
   }
 
   // 폰에서 친구 연락처 불러오기 버튼을 ScreenUtil 기반으로 재구성
-  Widget _buildImportButton(BuildContext context) {
+  Widget _buildContactImportButton(BuildContext context) {
+    final vm = ref.read(contactViewModelInterfaceProvider);
     return Container(
       // 높이를 60px 기준으로 반응형 설정
       height: 60.h,
@@ -70,9 +77,11 @@ class ContactView extends StatelessWidget {
         child: TextButton(
           // TextButton으로 변경하여 클릭 액션 추가
           onPressed: () {
-            // TODO: 실제 연락처 불러오기 API 로직 추가 (자바 스프링 통신 시작!)
+            vm.selectContact();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('폰 연락처 불러오기 기능 실행 (API 호출 대기중...)')),
+              SnackBar(
+                content: Text('폰 연락처 불러오기 기능 실행 via Flutter Method Channel'),
+              ),
             );
           },
           child: Text(
@@ -80,7 +89,6 @@ class ContactView extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               color: Theme.of(context).colorScheme.surface,
               fontWeight: FontWeight.bold,
-              // 폰트 크기를 18sp로 설정
               fontSize: 18.sp,
             ),
           ),

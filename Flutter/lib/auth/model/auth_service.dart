@@ -4,7 +4,7 @@ import 'package:riverpod/src/framework.dart';
 
 import '../../common/external_dio/dio_provider.dart';
 
-class AuthService implements IAuthService {
+class AuthService implements AuthServiceInterface {
   final Ref _ref;
   final Dio _dio;
 
@@ -13,7 +13,10 @@ class AuthService implements IAuthService {
   @override
   sendIdTokenToServer(String idToken) async {
     try {
-      await _dio.post('/api/v1/auth', data: {'provider': 'KAKAO','idToken': idToken});
+      await _dio.post(
+        '/api/v1/auth',
+        data: {'provider': 'KAKAO', 'idToken': idToken},
+      );
     } on DioException catch (e) {
       throw Exception('자체 백엔드 서버에 토큰 전송 실패');
     }

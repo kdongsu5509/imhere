@@ -24,6 +24,7 @@ dependencies:
   kakao_flutter_sdk: ^1.9.7+3
   kakao_map_sdk: ^1.2.2
   flutter_screenutil: ^5.9.3
+  permission_handler: ^12.0.1
 
 dev_dependencies:
   flutter_test:
