@@ -16,10 +16,10 @@ final GoRouter router = GoRouter(
       builder: (context, state, child) {
         return DefaultView(child: child);
       },
+
       // builder: (context, state, child) {
       //   return AuthView();
       // },
-
       routes: [
         GoRoute(
           path: '/geofence',
