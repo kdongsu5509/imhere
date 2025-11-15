@@ -1,30 +1,64 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iamhere/contact/repository/contact_entity.dart';
+import 'package:iamhere/contact/repository/contact_repository.dart';
+import 'package:iamhere/contact/repository/contact_repository_provider.dart';
 import 'package:iamhere/contact/view_model/contact.dart';
 import 'package:iamhere/contact/view_model/contact_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+
+import 'contact_view_model_test.mocks.dart';
 
 const DATA_CHANNEL_NAME = 'com.iamhere.app/contacts';
 const PERMISSION_CHANNEL_NAME = 'flutter.baseflow.com/permissions/methods';
-
 const SELECT_CONTACT_METHOD = 'selectContact';
 
+@GenerateMocks([ContactRepository])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  late ContactViewModel viewModel;
+  late MockContactRepository mockRepository;
+  late ProviderContainer container;
 
-  setUp(() {
-    viewModel = ContactViewModel();
+  final entityAlice = ContactEntity(id: 1, name: 'Alice', number: '111');
+  final entityBob = ContactEntity(id: 2, name: 'Bob', number: '222');
+
+  setUp(() async {
+    mockRepository = MockContactRepository();
+
+    container = ProviderContainer(
+      overrides: [contactRepositoryProvider.overrideWithValue(mockRepository)],
+    );
+
+    when(mockRepository.findAll()).thenAnswer((_) async => [entityAlice]);
+
+    _initializeMockHandlers();
+
+    await container.read(contactViewModelProvider.future);
+  });
+
+  tearDown(() {
+    container.dispose();
     _initializeMockHandlers();
   });
 
-  group('ContactViewModel - Contact Selection & Import Tests', () {
-    test('네이티브에서 단일 연락처 불러오기 성공 시 Contact 객체를 반환해야 한다', () async {
-      // given
+  group('ContactViewModel', () {
+    /**
+     * selectContact
+     */
+    test('1. selectContact 성공 시 Contact 객체를 반환하고 상태를 업데이트해야 한다', () async {
+      final vm = container.read(contactViewModelProvider.notifier);
       final mockContact = {'name': '고동수', 'number': '01012345678'};
+      final savedEntity = ContactEntity(
+        id: 3,
+        name: '고동수',
+        number: '01012345678',
+      );
 
-      _setMockPermissionHandler(PermissionStatus.granted.index);
+      _setMockPermissionHandler(PermissionStatus.limited.index);
       _setMockDataChannelHandler((MethodCall methodCall) async {
         if (methodCall.method == SELECT_CONTACT_METHOD) {
           return mockContact;
@@ -32,63 +66,147 @@ void main() {
         return null;
       });
 
-      // when
-      final Contact? result = await viewModel.selectContact();
+      when(mockRepository.save(any)).thenAnswer((_) async => savedEntity);
 
-      // then
+      final Contact? result = await vm.selectContact();
+
       expect(result, isNotNull);
       expect(result!.name, '고동수');
-      expect(result.number, '01012345678');
+      expect(container.read(contactViewModelProvider).value!.length, 2);
     });
 
-    //아래부터는 실패
+    test(
+      '2. 권한 허용 후 네이티브 호출 실패 시 PlatformException을 잡아 Exception을 던져야 한다',
+      () async {
+        final vm = container.read(contactViewModelProvider.notifier);
+        _setMockPermissionHandler(PermissionStatus.granted.index);
 
-    test('권한 허용 후 네이티브 호출 실패 시 빈 리스트를 반환해야 한다 (PlatformException)', () async {
-      // given
-      const NOT_EXIST_CONTACT_METHOD_NAME = 'notExist'; // importContact가 사용하는 메서드 이름 가정
-      _setMockPermissionHandler(PermissionStatus.granted.index);
+        _setMockDataChannelHandler((MethodCall methodCall) async {
+          if (methodCall.method == SELECT_CONTACT_METHOD) {
+            throw PlatformException(code: 'ERROR', message: '네이티브 오류');
+          }
+          return null;
+        });
 
-      _setMockDataChannelHandler((MethodCall methodCall) async {
-        if (methodCall.method == NOT_EXIST_CONTACT_METHOD_NAME) {
-          throw PlatformException(code: 'ERROR', message: '네이티브 오류');
-        }
-        return null;
-      });
+        expect(
+          vm.selectContact(),
+          throwsA(
+            predicate(
+              (e) => e is Exception && e.toString().contains('연락처 선택에 실패하였습니다'),
+            ),
+          ),
+        );
 
-      // when
-      final result = await viewModel.importContact();
+        await Future.delayed(Duration.zero);
+        expect(container.read(contactViewModelProvider).value!.length, 1);
+      },
+    );
 
-      // then
-      expect(result, isEmpty);
-    });
-
-    test('권한이 거부되면 네이티브 호출 없이 빈 리스트를 반환해야 한다', () async {
-      // given
+    test('3. 권한이 isDenied면 Exception("연락처 권한을 허용해주세요!")를 던져야 한다', () async {
+      final vm = container.read(contactViewModelProvider.notifier);
       _setMockPermissionHandler(PermissionStatus.denied.index);
 
-      // when
-      final result = await viewModel.importContact();
+      expect(vm.selectContact(), throwsA(isA<Exception>()));
 
-      // then
-      expect(result, isEmpty);
+      expect(
+        vm.selectContact(),
+        throwsA(
+          predicate(
+            (e) => e is Exception && e.toString().contains('연락처 권한을 허용해주세요!'),
+          ),
+        ),
+      );
     });
 
-    test('권한이 영구 거부되면 빈 리스트를 반환해야 한다', () async {
-      // given
+    test('4. 권한이 isRestricted이면 Exception를 던져야 한다', () async {
+      final vm = container.read(contactViewModelProvider.notifier);
+      _setMockPermissionHandler(PermissionStatus.restricted.index);
+
+      expect(vm.selectContact(), throwsA(isA<Exception>()));
+
+      expect(
+        vm.selectContact(),
+        throwsA(
+          predicate(
+            (e) =>
+                e is Exception &&
+                e.toString().contains(
+                  '사용자 기기의 정책으로 인해 접근이 불가능 합니다. 설정에서 정책을 변경해주세요',
+                ),
+          ),
+        ),
+      );
+    });
+
+    test('5. 권한이 isPermanentlyDenied이면 Exception를 던져야 한다', () async {
+      final vm = container.read(contactViewModelProvider.notifier);
       _setMockPermissionHandler(PermissionStatus.permanentlyDenied.index);
 
-      // when
-      final result = await viewModel.importContact();
+      expect(vm.selectContact(), throwsA(isA<Exception>()));
 
-      // then
-      expect(result, isEmpty);
+      expect(
+        vm.selectContact(),
+        throwsA(
+          predicate(
+            (e) =>
+                e is Exception &&
+                e.toString().contains(
+                  '연락처 권한이 영구적으로 거부되었습니다. 설정에서 수동으로 허용해주세요.',
+                ),
+          ),
+        ),
+      );
+    });
+  });
+
+  group('ContactViewModel.deleteContact', () {
+    setUp(() async {
+      when(
+        mockRepository.findAll(),
+      ).thenAnswer((_) async => [entityAlice, entityBob]);
+      container = ProviderContainer(
+        overrides: [
+          contactRepositoryProvider.overrideWithValue(mockRepository),
+        ],
+      );
+      await container.read(contactViewModelProvider.future);
+      // 이 시점에서 상태는 Alice와 Bob, 2개입니다.
+    });
+
+    test(
+      '6. Repository delete 실패 시 상태가 이전 상태로 롤백되어야 한다 (낙관적 업데이트 검증)',
+      () async {
+        final vm = container.read(contactViewModelProvider.notifier);
+        final initialList = container.read(contactViewModelProvider).value!;
+
+        when(mockRepository.delete(1)).thenThrow(Exception('DB 삭제 실패'));
+
+        await vm.deleteContact(1);
+
+        final finalState = container.read(contactViewModelProvider).value;
+
+        expect(finalState!.length, 2);
+        expect(finalState, equals(initialList));
+        expect(finalState.any((c) => c.id == 1), isTrue);
+        verify(mockRepository.delete(1)).called(1);
+      },
+    );
+
+    test('7. delete 성공 시 상태에서 해당 항목이 제거되어야 한다', () async {
+      final vm = container.read(contactViewModelProvider.notifier);
+      when(mockRepository.delete(2)).thenAnswer((_) async {});
+
+      await vm.deleteContact(2);
+
+      final finalState = container.read(contactViewModelProvider).value;
+
+      expect(finalState!.length, 1);
+      expect(finalState.any((c) => c.id == 2), isFalse);
+      expect(finalState.any((c) => c.id == 1), isTrue);
+      verify(mockRepository.delete(2)).called(1);
     });
   });
 }
-
-// ----------------------------------------------------------------------
-// 헬퍼 함수
-// ----------------------------------------------------------------------
 
 void _initializeMockHandlers() {
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

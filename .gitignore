@@ -49,6 +49,9 @@ HELP.md # 새로 추가: Spring 프로젝트 내 HELP.md (일반적으로 추적
 # riverpod 파일 관리
 *.g.dart
 
+# mock 데이터 제거
+*.mocks.dart
+
 # 테스트 측정 결과 제거
 /Flutter/coverage
 
