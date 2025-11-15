@@ -6,6 +6,8 @@ PODS:
     - Flutter
     - KakaoMapsSDK (= 2.12.10)
   - KakaoMapsSDK (2.12.10)
+  - permission_handler_apple (9.3.0):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -17,6 +19,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - kakao_flutter_sdk_common (from `.symlinks/plugins/kakao_flutter_sdk_common/ios`)
   - kakao_map_sdk (from `.symlinks/plugins/kakao_map_sdk/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
@@ -31,6 +34,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/kakao_flutter_sdk_common/ios"
   kakao_map_sdk:
     :path: ".symlinks/plugins/kakao_map_sdk/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   webview_flutter_wkwebview:
@@ -41,6 +46,7 @@ SPEC CHECKSUMS:
   kakao_flutter_sdk_common: 600d55b532da0bd37268a529e1add49302477710
   kakao_map_sdk: 6bd4f21236a247cf0403d0566be133b0a957fe5c
   KakaoMapsSDK: 32040e6268df2447c3f56dc4acada339d8eb8f32
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   webview_flutter_wkwebview: 1821ceac936eba6f7984d89a9f3bcb4dea99ebb2
 
