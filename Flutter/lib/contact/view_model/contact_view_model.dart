@@ -18,9 +18,7 @@ class ContactViewModel implements ContactViewModelInterface {
 
       if (result != null) {
         // 2. 결과 파싱 및 변환 (선택된 하나의 연락처만 Map 형태로 옴)
-        final contact = Contact.fromJson(
-          Map<String, dynamic>.from(result),
-        );
+        final contact = Contact.fromJson(Map<String, dynamic>.from(result));
         print("선택된 연락처: 이름 : ${contact.name} || 연락처 : ${contact.number}");
         return contact;
       }
