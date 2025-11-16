@@ -1,40 +1,37 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iamhere/common/view_component/page_title.dart';
+import 'package:iamhere/record/repository/geofence_record_entity.dart';
 import 'package:iamhere/record/view/component/record_tile.dart';
+import 'package:iamhere/record/view_model/geofence_record_view_model.dart';
 
-class RecordView extends StatelessWidget {
+class RecordView extends ConsumerWidget {
   const RecordView({super.key});
 
-  // 임시 데이터 모델 정의 (실제로는 Spring API에서 받아올 데이터 형태)
-  final List<Map<String, dynamic>> _tempData = const [
-    {
-      'location': "회사",
-      'time': 0, // 인덱스를 키로 사용
-      'message': "회사에 도착했습니다!",
-      'target': "팀장님",
-      'device': "내 기기에서",
-    },
-    {
-      'location': "우리집",
-      'time': 1,
-      'message': "퇴근 후 집에 도착!",
-      'target': "가족",
-      'device': "다른 기기에서",
-    },
-    {
-      'location': "카페",
-      'time': 2,
-      'message': "회의 장소에 도착했습니다.",
-      'target': "거래처",
-      'device': "내 기기에서",
-    },
-  ];
+  /// 수신자 JSON 문자열을 읽기 쉬운 형식으로 변환
+  String _formatRecipients(String recipientsJson) {
+    try {
+      final List<dynamic> recipients = jsonDecode(recipientsJson);
+      if (recipients.isEmpty) {
+        return '수신자 없음';
+      } else if (recipients.length == 1) {
+        return recipients.first as String;
+      } else {
+        return '${recipients.first} 외 ${recipients.length - 1}명';
+      }
+    } catch (e) {
+      return '수신자 정보 없음';
+    }
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recordsAsyncValue = ref.watch(geofenceRecordViewModelProvider);
+
     final pageTitle = "내가 보낸 메시지";
     final pageDescription = "자동으로 전송된 기록";
-    final pageInfoCount = "${_tempData.length}개 전송됨"; // 리스트 길이에 맞춰 변경
 
     return Column(
       children: [
@@ -43,34 +40,102 @@ class RecordView extends StatelessWidget {
           key: ValueKey(pageTitle),
           pageTitle: pageTitle,
           pageDescription: pageDescription,
-          pageInfoCount: pageInfoCount,
+          pageInfoCount: recordsAsyncValue.when(
+            data: (records) => "${records.length}개 전송됨",
+            loading: () => "로딩 중...",
+            error: (_, __) => "오류",
+          ),
           expandedWidgetFlex: 1,
         ),
 
         // 2. 기록 리스트 (ListView.builder 사용, flex: 4)
         Expanded(
           flex: 4,
-          child: ListView.builder(
-            // 리스트의 각 항목 사이에 간격을 주기 위해 Padding 적용
-            padding: EdgeInsets.zero, // 기본 패딩 제거 (필요하다면 추가 가능)
-            itemCount: _tempData.length,
-            itemBuilder: (context, index) {
-              final item = _tempData[index];
+          child: recordsAsyncValue.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (err, stack) => Center(
+              child: Padding(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 48.sp, color: Colors.red),
+                    SizedBox(height: 16.h),
+                    Text(
+                      '기록 로드 실패',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      err.toString(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    ElevatedButton(
+                      onPressed: () {
+                        ref
+                            .read(geofenceRecordViewModelProvider.notifier)
+                            .refresh();
+                      },
+                      child: Text('다시 시도'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            data: (records) {
+              if (records.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.history, size: 64.sp, color: Colors.grey),
+                      SizedBox(height: 16.h),
+                      Text(
+                        '전송된 기록이 없습니다',
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Text(
+                        '지오펜스에 진입하면\n자동으로 기록이 저장됩니다',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
 
-              // 실제 시간을 현재 시간에서 인덱스를 빼서 다르게 보이도록 설정
-              final recordTime = DateTime.now().subtract(
-                Duration(days: index, minutes: item['time'] * 10),
-              );
+              return ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: records.length,
+                itemBuilder: (context, index) {
+                  final record = records[index];
+                  final targetName = _formatRecipients(record.recipients);
 
-              return RecordTile(
-                // ValueKey를 사용하여 각 아이템에 고유한 키를 부여합니다.
-                tileKey: ValueKey('record_tile_${item['time']}'),
-
-                locationName: item['location'] as String,
-                recordTime: recordTime,
-                message: item['message'] as String,
-                targetName: item['target'] as String,
-                deviceLocation: item['device'] as String,
+                  return RecordTile(
+                    tileKey: ValueKey('record_tile_${record.id}'),
+                    locationName: record.geofenceName,
+                    recordTime: record.createdAt,
+                    message: record.message,
+                    targetName: targetName,
+                    deviceLocation: "내 기기에서",
+                  );
+                },
               );
             },
           ),

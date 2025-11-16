@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iamhere/common/router/go_router.dart';
 import 'package:iamhere/common/theme/im_here_them_data_light.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 
 Future main() async {
   await dotenv.load(fileName: "iam_here_flutter_secret.env");
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY']);
-  print("카카오 SDK : ${KakaoSdk.appKey}");
-  await KakaoMapSdk.instance.initialize(
-    dotenv.env['KAKAO_NATIVE_APP_KEY_DEV']!,
+  await FlutterNaverMap().init(
+    clientId: dotenv.env['NAVER_CLIENT_ID'],
+    onAuthFailed: (ex) {
+      switch (ex) {
+        case NQuotaExceededException(:final message):
+          print("사용량 초과 (message: $message)");
+          break;
+        case NUnauthorizedClientException() ||
+            NClientUnspecifiedException() ||
+            NAnotherAuthFailedException():
+          print("인증 실패: $ex");
+          break;
+      }
+    },
   );
-  var s = await KakaoMapSdk.instance.hashKey();
-  print("카카오 맵 HASHKEY $s");
   runApp(const ProviderScope(child: ImHereApp()));
 }
 

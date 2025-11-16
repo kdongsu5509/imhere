@@ -38,62 +38,61 @@ class _ContactViewState extends ConsumerState<ContactView> {
           interval: 2,
         ),
 
-        Expanded(
-          flex: 5,
-          child: buildContactTiles(contactsAsyncValue, vm),
-        ),
+        Expanded(flex: 5, child: buildContactTiles(contactsAsyncValue, vm)),
       ],
     );
   }
 
-  Widget buildContactTiles(AsyncValue<List<Contact>> contactsAsyncValue, ContactViewModel vm) {
+  Widget buildContactTiles(
+    AsyncValue<List<Contact>> contactsAsyncValue,
+    ContactViewModel vm,
+  ) {
     return contactsAsyncValue.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) => Center(
-            child: Padding(
-              padding: EdgeInsets.all(20.w),
-              child: Text(
-                '연락처 로드 실패: ${err.toString().contains("Exception:") ? err.toString().split("Exception: ")[1] : err.toString()}',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.red, fontSize: 16.sp),
-              ),
-            ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(
+        child: Padding(
+          padding: EdgeInsets.all(20.w),
+          child: Text(
+            '연락처 로드 실패: ${err.toString().contains("Exception:") ? err.toString().split("Exception: ")[1] : err.toString()}',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.red, fontSize: 16.sp),
           ),
+        ),
+      ),
 
-          data: (contacts) {
-            if (contacts.isEmpty) {
-              return Center(
-                child: Text(
-                  "등록된 친구가 없습니다.\n위 버튼을 눌러 연락처를 불러오세요.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16.sp, color: Colors.grey),
-                ),
-              );
-            }
-            return ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              itemCount: contacts.length,
-              itemBuilder: (context, index) {
-                final contact = contacts[index];
-                final contactId = contact.id;
+      data: (contacts) {
+        if (contacts.isEmpty) {
+          return Center(
+            child: Text(
+              "등록된 친구가 없습니다.\n위 버튼을 눌러 연락처를 불러오세요.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+            ),
+          );
+        }
+        return ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          itemCount: contacts.length,
+          itemBuilder: (context, index) {
+            final contact = contacts[index];
+            final contactId = contact.id;
 
-                return ContactTile(
-                  key: ValueKey(contact.number),
-                  contactName: contact.name,
-                  phoneNumber: contact.number,
-                  onDelete: () {
-                    _confirmDelete(context, vm, contactId!, contact.name);
-                  },
-                );
+            return ContactTile(
+              key: ValueKey(contact.number),
+              contactName: contact.name,
+              phoneNumber: contact.number,
+              onDelete: () {
+                _confirmDelete(context, vm, contactId!, contact.name);
               },
             );
           },
         );
+      },
+    );
   }
 
   // 폰에서 친구 연락처 불러오기 버튼
   Widget _buildContactImportButton(BuildContext context, vmInterface) {
-
     onPressed() async {
       final result = await vmInterface.selectContact();
 
@@ -102,9 +101,9 @@ class _ContactViewState extends ConsumerState<ContactView> {
           SnackBar(content: Text('${result.name}님 연락처가 등록되었습니다!')),
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('연락처 불러오기가 취소되었거나 실패했습니다.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('연락처 불러오기가 취소되었거나 실패했습니다.')));
       }
     }
 

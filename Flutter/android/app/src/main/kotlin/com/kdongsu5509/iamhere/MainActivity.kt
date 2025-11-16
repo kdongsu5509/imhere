@@ -9,10 +9,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.provider.ContactsContract
+import android.telephony.SmsManager
+import android.Manifest
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 class MainActivity : FlutterActivity() {
-    private val CHANNEL_NAME = "com.iamhere.app/contacts"
+    private val CONTACTS_CHANNEL_NAME = "com.iamhere.app/contacts"
+    private val SMS_CHANNEL_NAME = "com.kdongsu5509.iamhere/sms"
     private val METHOD_NAME = "selectContact"
     private val PICK_CONTACT_REQUEST_ID = 1 // 안드로이드에서 사용하는 구분자.
 
@@ -21,7 +27,8 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_NAME).setMethodCallHandler {
+        // 연락처 선택 채널
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CONTACTS_CHANNEL_NAME).setMethodCallHandler {
                 call, result ->
             //call은 플러터에서 호출한 함수의 이름 정보, result는 안드로이드에서 반환하는 정보.
 
@@ -38,6 +45,27 @@ class MainActivity : FlutterActivity() {
                 startActivityForResult(intent, PICK_CONTACT_REQUEST_ID)
             } else {
                 result.notImplemented()
+            }
+        }
+
+        // SMS 전송 채널
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SMS_CHANNEL_NAME).setMethodCallHandler {
+                call, result ->
+            when (call.method) {
+                "sendSms" -> {
+                    val phoneNumbers = call.argument<List<String>>("phoneNumbers")
+                    val message = call.argument<String>("message")
+                    
+                    if (phoneNumbers == null || message == null) {
+                        result.error("INVALID_ARGUMENT", "전화번호 또는 메시지가 없습니다.", null)
+                        return@setMethodCallHandler
+                    }
+
+                    sendSms(phoneNumbers, message, result)
+                }
+                else -> {
+                    result.notImplemented()
+                }
             }
         }
     }
@@ -98,5 +126,42 @@ class MainActivity : FlutterActivity() {
             }
         }
         return contactMap
+    }
+
+    // SMS 전송 함수
+    private fun sendSms(phoneNumbers: List<String>, message: String, result: MethodChannel.Result) {
+        // SEND_SMS 권한 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) 
+            != PackageManager.PERMISSION_GRANTED) {
+            result.error("PERMISSION_DENIED", "SEND_SMS 권한이 없습니다.", null)
+            return
+        }
+
+        try {
+            val smsManager = SmsManager.getDefault()
+            var allSuccess = true
+
+            for (phoneNumber in phoneNumbers) {
+                try {
+                    // SMS 전송
+                    smsManager.sendTextMessage(
+                        phoneNumber,
+                        null,
+                        message,
+                        null,
+                        null
+                    )
+                    Log.d("MainActivity", "SMS 전송 성공: $phoneNumber")
+                } catch (e: Exception) {
+                    Log.e("MainActivity", "SMS 전송 실패: $phoneNumber", e)
+                    allSuccess = false
+                }
+            }
+
+            result.success(allSuccess)
+        } catch (e: Exception) {
+            Log.e("MainActivity", "SMS 전송 오류", e)
+            result.error("SMS_SEND_FAILED", "SMS 전송 중 오류가 발생했습니다: ${e.message}", null)
+        }
     }
 }

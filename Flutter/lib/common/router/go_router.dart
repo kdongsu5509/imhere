@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iamhere/auth/view/auth_view.dart';
 import 'package:iamhere/common/view_component/default_view.dart';
 import 'package:iamhere/contact/view/contact_view.dart';
+import 'package:iamhere/geofence/view/component/map_select_view.dart';
 import 'package:iamhere/geofence/view/geofence_enroll_view.dart';
 import 'package:iamhere/geofence/view/geofence_view.dart';
 import 'package:iamhere/record/view/record_view.dart';

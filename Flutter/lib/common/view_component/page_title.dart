@@ -6,6 +6,7 @@ class PageTitle extends StatefulWidget {
   final String pageDescription;
   final String pageInfoCount;
   Widget? additionalWidget;
+  Widget? secondAdditionalWidget;
   int interval;
   int expandedWidgetFlex;
   PageTitle({
@@ -14,6 +15,7 @@ class PageTitle extends StatefulWidget {
     required this.pageDescription,
     required this.pageInfoCount,
     this.additionalWidget,
+    this.secondAdditionalWidget,
     this.interval = 0,
     this.expandedWidgetFlex = 2,
   });
@@ -52,6 +54,7 @@ class _PageTitleState extends State<PageTitle> {
           ),
           SizedBox(height: 10.h * widget.interval),
           ?widget.additionalWidget,
+          ?widget.secondAdditionalWidget,
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:iamhere/common/external_dio/auth_interceptor.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dio_provider.g.dart';
@@ -14,6 +15,10 @@ Dio dio(Ref ref) {
     ),
   );
 
+  // 인증 인터셉터 추가 (먼저 추가하여 토큰 자동 추가 및 refresh 처리)
+  dio.interceptors.add(AuthInterceptor(dio));
+
+  // 로그 인터셉터 추가
   dio.interceptors.add(
     LogInterceptor(
       //요청

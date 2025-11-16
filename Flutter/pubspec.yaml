@@ -12,20 +12,30 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  flutter_dotenv: ^6.0.0
-
-  dio: ^5.9.0
-  json_annotation: ^4.9.0
-
-  flutter_riverpod: ^3.0.3
-
-  go_router: ^17.0.0
-
+  # 카카오 로그인 SDK
   kakao_flutter_sdk: ^1.9.7+3
-  kakao_map_sdk: ^1.2.2
-  flutter_screenutil: ^5.9.3
-  permission_handler: ^12.0.1
-  sqflite: ^2.4.2
+  dio: ^5.9.0 # http 통신
+  json_annotation: ^4.9.0 # JSON 직렬화
+
+  #상태관리
+  flutter_riverpod: ^3.0.3
+  go_router: ^17.0.0 # 화면 간 이동
+  flutter_screenutil: ^5.9.3 # 반응형 화면을 위한 전역 상태 제공자
+
+  # 저장소
+  flutter_dotenv: ^6.0.0 # 외부 API KEY 관리
+  sqflite: ^2.4.2 # 로컬 Database
+  flutter_secure_storage: ^9.2.2 # 중요한 보안 관련 토큰 저장소
+
+  # NAVER 지도 SDK
+  flutter_naver_map: ^1.4.1+1
+
+  # NATIVE 기능
+  permission_handler: ^12.0.1 # 권한 관리자
+  geolocator: ^14.0.2 # 위치
+  url_launcher: ^6.3.1 # SMS (iOS용)
+
+  # ETC
   path: ^1.9.1
 
 dev_dependencies:
@@ -34,12 +44,19 @@ dev_dependencies:
 
   flutter_lints: ^5.0.0
 
+  # 외부 라이브러리 애노테이션 자동 생성자
+  build_runner: ^2.4.9
+
+  # 상태 관리 도구 자동 생성기
   riverpod_annotation: ^3.0.3
   riverpod_generator: ^3.0.3
-  build_runner: ^2.4.9
+
+  # JSON 직렬화 도구
   json_serializable: ^6.10.0
-  coverage: ^1.15.0
-  mockito: ^5.5.0
+
+  # 테스트
+  coverage: ^1.15.0 # 테스트 커버리지 측정
+  mockito: ^5.5.0 # 테스트용 MOCK 객체 생성
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -50,6 +67,7 @@ flutter:
     - assets/images/
     - iam_here_flutter_secret.env
 
+# 배달의 민족에서 제공하는 폰트를 기본 폰트로 추가
   fonts:
     - family: BMHANNAPro
       fonts:
