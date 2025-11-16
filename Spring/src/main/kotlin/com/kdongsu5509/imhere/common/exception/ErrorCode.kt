@@ -59,6 +59,20 @@ enum class ErrorCode(
         "OIDC 공개 키 목록에서 공개키를 가져오는데 실패했습니다."
     ),
 
+    /**
+     * 자체 발급한 JWT 관련 오류
+     */
+    IMHERE_EXPIRED_TOKEN(
+        HttpStatus.UNAUTHORIZED,
+        "IMHERE_TOKEN_001",
+        "만료된 토큰입니다"
+    ),
+    IMHERE_INVALID_TOKEN(
+        HttpStatus.UNAUTHORIZED,
+        "IMHERE_TOKEN_002",
+        "잘못된 토큰입니다"
+    ),
+
 
     /**
      * USER ERRORS : 사용자 관련 오류

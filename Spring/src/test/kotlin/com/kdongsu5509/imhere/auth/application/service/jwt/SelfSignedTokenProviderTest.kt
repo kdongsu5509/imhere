@@ -1,6 +1,8 @@
 package com.kdongsu5509.imhere.auth.application.service.jwt
 
 import com.kdongsu5509.imhere.auth.application.port.out.CachePort
+import com.kdongsu5509.imhere.common.exception.implementation.auth.ImHereTokenExpiredException
+import com.kdongsu5509.imhere.common.exception.implementation.auth.ImHereTokenInvalidException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -123,10 +125,10 @@ class SelfSignedTokenProviderTest {
         `when`(jwtTokenUtil.validateToken(invalidRefreshToken)).thenReturn(false)
 
         // when & then
-        assertThrows<IllegalArgumentException> {
+        assertThrows< ImHereTokenInvalidException> {
             selfSignedTokenProvider.reissueJwtToken(invalidRefreshToken)
         }.also { exception ->
-            assertThat(exception.message).isEqualTo("잘못된 리프레시 토큰")
+            assertThat(exception.message).isEqualTo("잘못된 토큰입니다")
         }
 
         verify(jwtTokenUtil).validateToken(invalidRefreshToken)
@@ -147,10 +149,10 @@ class SelfSignedTokenProviderTest {
         `when`(jwtTokenUtil.getExpirationDateFromToken(expiredRefreshToken)).thenReturn(expiredDate)
 
         // when & then
-        assertThrows<IllegalArgumentException> {
+        assertThrows<ImHereTokenExpiredException> {
             selfSignedTokenProvider.reissueJwtToken(expiredRefreshToken)
         }.also { exception ->
-            assertThat(exception.message).isEqualTo("만료된 리프레시 토큰")
+            assertThat(exception.message).isEqualTo("만료된 토큰입니다")
         }
 
         verify(jwtTokenUtil).getExpirationDateFromToken(expiredRefreshToken)

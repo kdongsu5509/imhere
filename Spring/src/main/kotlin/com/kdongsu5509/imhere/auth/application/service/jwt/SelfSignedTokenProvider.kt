@@ -2,6 +2,8 @@ package com.kdongsu5509.imhere.auth.application.service.jwt
 
 import com.kdongsu5509.imhere.auth.application.dto.SelfSignedJWT
 import com.kdongsu5509.imhere.auth.application.port.out.CachePort
+import com.kdongsu5509.imhere.common.exception.implementation.auth.ImHereTokenExpiredException
+import com.kdongsu5509.imhere.common.exception.implementation.auth.ImHereTokenInvalidException
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.Instant
@@ -33,11 +35,11 @@ class SelfSignedTokenProvider(
 
         //a. 토큰 유효성 검사
         if (!jwtTokenUtil.validateToken(refreshToken)) {
-            throw IllegalArgumentException("잘못된 리프레시 토큰")
+            throw ImHereTokenInvalidException()
         }
         //b. 토큰 만료 시간 검사
         if (jwtTokenUtil.getExpirationDateFromToken(refreshToken).isBefore(LocalDateTime.now())) {
-            throw IllegalArgumentException("만료된 리프레시 토큰")
+            throw ImHereTokenExpiredException()
         }
 
         val refreshTokenFromRedis = cachePort.find("refresh:$username") as String?
