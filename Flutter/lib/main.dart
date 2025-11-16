@@ -16,12 +16,12 @@ Future main() async {
     onAuthFailed: (ex) {
       switch (ex) {
         case NQuotaExceededException(:final message):
-          print("사용량 초과 (message: $message)");
+          debugPrint("사용량 초과 (message: $message)");
           break;
         case NUnauthorizedClientException() ||
             NClientUnspecifiedException() ||
             NAnotherAuthFailedException():
-          print("인증 실패: $ex");
+          debugPrint("인증 실패: $ex");
           break;
       }
     },
@@ -41,10 +41,11 @@ class _ImHereAppState extends State<ImHereApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(402, 874),
-      minTextAdapt: true, // 작은 화면에서 텍스트 크기 조절 허용
-      splitScreenMode: true, // 멀티 윈도우 지원
+      minTextAdapt: true,
+      splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           title: 'ImHere App Dev',
           theme: lightTheme,
           routerConfig: router,
