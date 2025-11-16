@@ -103,70 +103,65 @@ class _MapSelectViewState extends State<MapSelectView> {
     AsyncSnapshot<NaverMapViewOptions> snapshot,
     BuildContext context,
   ) {
-    return Stack(
-      children: [
-        _naverMap(snapshot),
-        _finishedButton(context),
-      ],
-    );
+    return Stack(children: [_naverMap(snapshot), _finishedButton(context)]);
   }
 
   Positioned _finishedButton(BuildContext context) {
     return Positioned(
-        bottom: 24,
-        left: 16,
-        right: 80,
-        child: ElevatedButton(
-          onPressed: () {
-            debugPrint('완료 버튼 클릭됨!');
-            _confirmSelection();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor,
-            padding: EdgeInsets.symmetric(vertical: 16.h),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            elevation: 4,
+      bottom: 24,
+      left: 16,
+      right: 80,
+      child: ElevatedButton(
+        onPressed: () {
+          debugPrint('완료 버튼 클릭됨!');
+          _confirmSelection();
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).primaryColor,
+          padding: EdgeInsets.symmetric(vertical: 16.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
           ),
-          child: Text(
-            '이 위치로 선택',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-            ),
+          elevation: 4,
+        ),
+        child: Text(
+          '이 위치로 선택',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
           ),
         ),
-      );
+      ),
+    );
   }
 
   NaverMap _naverMap(AsyncSnapshot<NaverMapViewOptions> snapshot) {
     return NaverMap(
-        options: snapshot.data!,
-        onMapReady: (controller) {
-          _mapController = controller;
-          debugPrint("Naver map is ready!");
+      options: snapshot.data!,
+      onMapReady: (controller) {
+        _mapController = controller;
+        debugPrint("Naver map is ready!");
 
-          if (widget.initialLocation != null) {
-            _updateMarker(widget.initialLocation!);
-          }
-        },
-        onMapTapped: (NPoint point, NLatLng latlng) {
-          setState(() {
-            _selectedLocation = latlng;
-          });
-          _updateMarker(latlng);
-          debugPrint(
-            "선택된 위치 - lat: ${latlng.latitude}, lng: ${latlng.longitude}",
-          );
-        },
-        onCameraChange: (NCameraUpdateReason reason, bool animated) {
-          if (reason == NCameraUpdateReason.gesture) {
-            debugPrint("지도가 제스처로 이동됨");
-          }
-        },
-      );
+        if (widget.initialLocation != null) {
+          _updateMarker(widget.initialLocation!);
+        }
+      },
+      onMapTapped: (NPoint point, NLatLng latlng) {
+        setState(() {
+          _selectedLocation = latlng;
+        });
+        _updateMarker(latlng);
+        debugPrint(
+          "선택된 위치 - lat: ${latlng.latitude}, lng: ${latlng.longitude}",
+        );
+      },
+      onCameraChange: (NCameraUpdateReason reason, bool animated) {
+        if (reason == NCameraUpdateReason.gesture) {
+          debugPrint("지도가 제스처로 이동됨");
+        }
+      },
+    );
   }
 
   Center _buildErrorWidget(AsyncSnapshot<NaverMapViewOptions> snapshot) {
