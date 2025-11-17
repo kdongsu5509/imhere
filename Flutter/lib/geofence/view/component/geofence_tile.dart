@@ -26,7 +26,7 @@ class GeofenceTile extends StatelessWidget {
     return GestureDetector(
       onLongPress: onLongPress,
       child: Container(
-        decoration: _getGeofenceTileDocoration(tileBackgroundColor),
+        decoration: _getGeofenceTileDecoration(tileBackgroundColor),
         width: MediaQuery.of(context).size.width,
         height: 100.h,
         padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -72,8 +72,8 @@ class GeofenceTile extends StatelessWidget {
           activeTrackColor: const Color(0xFF66C8C8), // 활성화 시 트랙 색상 (이미지 청록색)
           // 비활성화 시 트랙 색상 (이미지 회색)
           inactiveThumbColor: Colors.white, // 비활성화 시 thumb 색상 (흰색)
-          inactiveTrackColor: Colors.grey.withOpacity(
-            0.4,
+          inactiveTrackColor: Colors.grey.withValues(
+            alpha: 0.4,
           ), // 비활성화 시 트랙 색상 (연한 회색)
         ),
       ),
@@ -113,7 +113,7 @@ class GeofenceTile extends StatelessWidget {
     );
   }
 
-  BoxDecoration _getGeofenceTileDocoration(Color tileBackgroundColor) {
+  BoxDecoration _getGeofenceTileDecoration(Color tileBackgroundColor) {
     return BoxDecoration(
       color: tileBackgroundColor,
       borderRadius: BorderRadius.all(Radius.circular(25.w)),
