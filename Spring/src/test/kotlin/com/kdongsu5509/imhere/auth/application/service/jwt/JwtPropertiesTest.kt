@@ -1,12 +1,19 @@
 package com.kdongsu5509.imhere.auth.application.service.jwt
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
+@SpringBootTest(
+    properties = [
+        "jwt.secret=testsecretkey",
+        "jwt.accessExpirationMinutes=1",
+        "jwt.refreshExpirationDays=1",
+        "jwt.accessHeaderName=Authorization",
+    ]
+)
 class JwtPropertiesTest {
     @Autowired
     private lateinit var jwtProperties: JwtProperties

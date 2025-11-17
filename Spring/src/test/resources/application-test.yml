@@ -2,16 +2,10 @@ spring:
   data:
     redis:
       port: 6379
-      host: localhost
+      host: host.docker.internal
   batch:
     job:
       enabled: false
-
-jwt:
-  secret: testsecretkey
-  accessExpirationMinutes: 1
-  refresh-expiration-days: 1
-  accessHeaderName: Authorization
 
 oidc:
   kakao:
