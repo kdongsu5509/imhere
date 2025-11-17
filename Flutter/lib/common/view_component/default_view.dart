@@ -64,7 +64,7 @@ class DefaultView extends StatelessWidget {
         titleSpacing: 0,
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.w), // 15px 가로 패딩
-          child: Flexible(child: _buildImHereAsTitle(context, theme)),
+          child: _buildImHereAsTitle(context, theme),
         ),
       ),
     );

@@ -10,6 +10,7 @@ import 'package:iamhere/geofence/repository/geofence_repository_provider.dart';
 import 'package:iamhere/geofence/service/my_location_service.dart';
 import 'package:iamhere/geofence/service/sms_permission_service.dart';
 import 'package:iamhere/geofence/service/sms_service.dart';
+import 'package:iamhere/geofence/view_model/geofence_list_view_model.dart';
 import 'package:iamhere/record/repository/geofence_record_entity.dart';
 import 'package:iamhere/record/repository/geofence_record_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -132,7 +133,9 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
           // SMS 전송 성공 시 지오펜스 비활성화
           if (smsSuccess && geofence.id != null) {
             try {
-              await repository.updateActiveStatus(geofence.id!, false);
+              // GeofenceListViewModel을 통해 상태 업데이트 (UI 자동 갱신)
+              final listViewModel = ref.read(geofenceListViewModelProvider.notifier);
+              await listViewModel.toggleActive(geofence.id!, false);
               log('지오펜스 비활성화 완료: ${geofence.name}');
             } catch (e) {
               log('지오펜스 비활성화 실패: $e');

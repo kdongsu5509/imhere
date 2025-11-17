@@ -38,7 +38,8 @@ class GeofenceEntity {
       radius: radius ?? this.radius,
       message: message ?? this.message,
       contactIds: contactIds ?? this.contactIds,
-      isActive: isActive ?? this.isActive,
+      // isActive가 null이 아닐 때만 업데이트 (false도 포함)
+      isActive: isActive != null ? isActive : this.isActive,
     );
   }
 
