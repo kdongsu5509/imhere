@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iamhere/auth/service/token_storage_service.dart';
@@ -10,32 +11,36 @@ import 'package:iamhere/record/view/record_view.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/geofence',
+  redirect: (context, state) async {
+    // /auth 경로는 인증 체크 제외
+    if (state.uri.path == '/auth') {
+      return null;
+    }
+
+    // secure_storage에서 토큰 확인
+    final accessToken = await TokenStorageService().getAccessToken();
+    
+    // 토큰이 없으면 /auth로 리다이렉트
+    if (accessToken == null || accessToken.isEmpty) {
+      return '/auth';
+    }
+
+    // 토큰이 있으면 정상 진행
+    return null;
+  },
 
   // 모든 라우트 정의
   routes: [
+    // 인증 화면
+    GoRoute(
+      path: '/auth',
+      builder: (context, state) => const AuthView(),
+    ),
+
+    // 메인 화면 (인증 필요)
     ShellRoute(
       builder: (context, state, child) {
-        // secure_storage에서 토큰 확인
-        return FutureBuilder<String?>(
-          future: TokenStorageService().getAccessToken(),
-          builder: (context, snapshot) {
-            // 로딩 중일 때는 로딩 화면 표시
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
-            }
-
-            // 토큰이 없으면 AuthView 표시
-            final accessToken = snapshot.data;
-            if (accessToken == null || accessToken.isEmpty) {
-              return const AuthView();
-            }
-
-            // 토큰이 있으면 메인 화면 표시
-            return DefaultView(child: child);
-          },
-        );
+        return DefaultView(child: child);
       },
       routes: [
         GoRoute(
