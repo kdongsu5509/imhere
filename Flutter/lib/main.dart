@@ -12,7 +12,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY']);
   await FlutterNaverMap().init(
-    clientId: dotenv.env['NAVER_CLIENT_ID'],
+    clientId: dotenv.env['NAVER_MAP_CLIENT_ID'],
     onAuthFailed: (ex) {
       switch (ex) {
         case NQuotaExceededException(:final message):
