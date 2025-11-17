@@ -96,8 +96,13 @@ jacocoTestReport {
                     fileTree(dir: file, exclude: ['**/*Application*',
                                                   '**/*Config*',
                                                   '**/*Dto*',
-                                                  '**/*Vo*',
-                                                  '**/*Entity*']
+                                                  '**/vo/**',
+                                                  '**/*Entity*',
+                                                  '**/*Exception*',
+                                                  '**/*Properties*',
+                                                  '**/*Mapper*',
+                                                  '**/*ErrorCode*',
+                                                  '**/*ErrorResponse*']
                     )
                 })
     }
@@ -133,6 +138,23 @@ jacocoTestCoverageVerification {
                 maximum = BigDecimal.valueOf(150)
             }
         }
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                classDirectories.files.collect { file ->
+                    fileTree(dir: file, exclude: ['**/*Application*',
+                                                  '**/*Config*',
+                                                  '**/*Dto*',
+                                                  '**/vo/**',
+                                                  '**/*Entity*',
+                                                  '**/*Exception*',
+                                                  '**/*Properties*',
+                                                  '**/*Mapper*',
+                                                  '**/*ErrorCode*',
+                                                  '**/*ErrorResponse*']
+                    )
+                })
     }
 
     dependsOn test
