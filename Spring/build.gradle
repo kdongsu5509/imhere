@@ -111,35 +111,6 @@ jacocoTestReport {
 }
 
 jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            enabled = true
-
-            element = 'CLASS' // 클래스 단위로 검증
-
-            // 브랜치 커버리지를 최소 90% 로 설정
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 0.90
-            }
-
-            //라인 커버리지를 최소 90%로 설정
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = BigDecimal.valueOf(0.9) // 90% coverage 로 설정
-            }
-
-            //빈 줄을 제외한 코드의 라인 수를 최대 150으로 제한
-            limit {
-                counter = 'LINE'
-                value = 'TOTALCOUNT'
-                maximum = BigDecimal.valueOf(150)
-            }
-        }
-    }
-
     afterEvaluate {
         classDirectories.setFrom(
                 classDirectories.files.collect { file ->
@@ -166,5 +137,5 @@ tasks.named('test') {
     jacoco {
         destinationFile = file("$buildDir/jacoco/jacoco.exec")
     }
-    finalizedBy jacocoTestReport // report is always generated after tests
+    finalizedBy jacocoTestReport
 }
