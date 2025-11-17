@@ -17,7 +17,7 @@ class AuthViewModel implements AuthViewModelInterface {
     String? idToken;
     idToken = await _doUserKakaoLogin();
     if (idToken != null) {
-      authService.sendIdTokenToServer(idToken);
+      await authService.sendIdTokenToServer(idToken);
     }
   }
 

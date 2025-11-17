@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 final ThemeData lightTheme = ThemeData(
-  // **1. 기본 설정 (Light)**
   brightness: Brightness.light,
-
-  // Scaffolf(앱 화면)의 기본 배경색
   scaffoldBackgroundColor: Colors.white,
 
   splashColor: Colors.transparent,

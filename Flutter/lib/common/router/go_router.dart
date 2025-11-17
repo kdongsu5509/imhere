@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iamhere/auth/service/token_storage_service.dart';
 import 'package:iamhere/auth/view/auth_view.dart';
 import 'package:iamhere/common/view_component/default_view.dart';
 import 'package:iamhere/contact/view/contact_view.dart';
-import 'package:iamhere/geofence/view/component/map_select_view.dart';
 import 'package:iamhere/geofence/view/geofence_enroll_view.dart';
 import 'package:iamhere/geofence/view/geofence_view.dart';
 import 'package:iamhere/record/view/record_view.dart';
@@ -15,12 +14,28 @@ final GoRouter router = GoRouter(
   // 모든 라우트 정의
   routes: [
     ShellRoute(
-      // builder: (context, state, child) {
-      //   return DefaultView(child: child);
-      // },
-
       builder: (context, state, child) {
-        return AuthView();
+        // secure_storage에서 토큰 확인
+        return FutureBuilder<String?>(
+          future: TokenStorageService().getAccessToken(),
+          builder: (context, snapshot) {
+            // 로딩 중일 때는 로딩 화면 표시
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            // 토큰이 없으면 AuthView 표시
+            final accessToken = snapshot.data;
+            if (accessToken == null || accessToken.isEmpty) {
+              return const AuthView();
+            }
+
+            // 토큰이 있으면 메인 화면 표시
+            return DefaultView(child: child);
+          },
+        );
       },
       routes: [
         GoRoute(

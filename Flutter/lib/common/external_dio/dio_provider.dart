@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:iamhere/common/external_dio/auth_interceptor.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -6,9 +7,11 @@ part 'dio_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Dio dio(Ref ref) {
+  final serverUrl = dotenv.env['SERVER_URL'] ?? 'http://localhost:8080';
+  
   final dio = Dio(
     BaseOptions(
-      baseUrl: 'http://10.0.0.198:8080',
+      baseUrl: serverUrl,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {'Content-Type': 'application/json'},
