@@ -26,7 +26,7 @@ class AuthController(val verifyIdTokenUserCase: HandleOIDCUseCase, val reissueJw
         return ImhereJwt(jwt.accessToken, jwt.refreshToken)
     }
 
-    @PostMapping("/reisuue")
+    @PostMapping("/reissue")
     fun handleJwtTokenReissueRequest(@RequestBody jwtRefreshToken: JwtRefreshToken): ImhereJwt {
         val jwt = reissueJwtPort.reissue(jwtRefreshToken.refreshToken)
         return ImhereJwt(jwt.accessToken, jwt.refreshToken)

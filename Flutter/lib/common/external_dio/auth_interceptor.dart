@@ -38,7 +38,7 @@ class AuthInterceptor extends Interceptor {
       final requestOptions = err.requestOptions;
 
       // refresh 요청 자체가 401이면 토큰 삭제하고 실패 처리
-      if (requestOptions.path == '/api/v1/auth/refresh') {
+      if (requestOptions.path == '/api/v1/auth/reissue') {
         await TokenStorageService().deleteAllTokens();
         handler.next(err);
         return;
@@ -110,7 +110,7 @@ class AuthInterceptor extends Interceptor {
       );
 
       final response = await refreshDio.post(
-        '/api/v1/auth/refresh',
+        '/api/v1/auth/reissue',
         data: {'refreshToken': refreshToken},
       );
 
