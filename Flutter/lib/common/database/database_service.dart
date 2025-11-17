@@ -21,10 +21,22 @@ class DatabaseService {
     return _database!;
   }
 
+  String _createContactsTableQuery() {
+    return 'CREATE TABLE $contactTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, number TEXT)';
+  }
+
+  String _createGeofenceTableQuery() {
+    return 'CREATE TABLE $geofenceTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, lat REAL, lng REAL, radius REAL, message TEXT, contact_ids TEXT, is_active INTEGER DEFAULT 0)';
+  }
+
+  String _createRecordsTableQuery() {
+    return 'CREATE TABLE $recordTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, geofence_id INTEGER, geofence_name TEXT, message TEXT, recipients TEXT, created_at TEXT)';
+  }
+
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), databaseName);
 
-    String contactTableQuery = _createContactstabeTableQuery();
+    String contactTableQuery = _createContactsTableQuery();
     String geofenceTableQuery = _createGeofenceTableQuery();
     String recordsTableQuery = _createRecordsTableQuery();
 
@@ -159,14 +171,6 @@ class DatabaseService {
     );
   }
 
-  String _createContactstabeTableQuery() {
-    return 'CREATE TABLE $contactTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, number TEXT)';
-  }
-
-  String _createGeofenceTableQuery() {
-    return 'CREATE TABLE $geofenceTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, lat REAL, lng REAL, radius REAL, message TEXT, contact_ids TEXT, is_active INTEGER DEFAULT 0)';
-  }
-
   /**
    * 지오펜스 기록
    * - Create - save : 1개 저장
@@ -219,9 +223,5 @@ class DatabaseService {
   Future<void> deleteAllGeofenceRecords() async {
     var db = await instance.database;
     await db.delete(recordTableName);
-  }
-
-  String _createRecordsTableQuery() {
-    return 'CREATE TABLE $recordTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, geofence_id INTEGER, geofence_name TEXT, message TEXT, recipients TEXT, created_at TEXT)';
   }
 }
