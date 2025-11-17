@@ -28,10 +28,10 @@ class _AuthViewState extends ConsumerState<AuthView> {
     // 로그인 성공 후 토큰 확인 및 화면 전환
     final accessToken = await TokenStorageService().getAccessToken();
     if (accessToken != null && accessToken.isNotEmpty && mounted) {
-      // 라우터를 갱신하여 ShellRoute의 builder가 다시 실행되도록 함
+      // 라우터를 갱신하여 redirect가 다시 실행되도록 함
       if (context.mounted) {
-        // router.refresh()를 사용하여 라우터를 새로고침
-        router.refresh();
+        // router.go()를 호출하면 redirect가 다시 실행되어 토큰이 있으면 /geofence로 이동
+        router.go('/geofence');
       }
     }
   }
