@@ -40,7 +40,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakaobf284f33bfeba9bc59575706d0eb0e9c://oauth</string>
+				<string>kakao840e16595771540d4b1056238cbb6b51://oauth</string>
 			</array>
 		</dict>
 	</array>

@@ -15,13 +15,13 @@ final GoRouter router = GoRouter(
   // 모든 라우트 정의
   routes: [
     ShellRoute(
-      builder: (context, state, child) {
-        return DefaultView(child: child);
-      },
-
       // builder: (context, state, child) {
-      //   return AuthView();
+      //   return DefaultView(child: child);
       // },
+
+      builder: (context, state, child) {
+        return AuthView();
+      },
       routes: [
         GoRoute(
           path: '/geofence',
