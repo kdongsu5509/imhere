@@ -351,15 +351,15 @@ class _GeofenceViewState extends ConsumerState<GeofenceView>
       opacity: _controller,
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-          20.w, // 좌 패딩
+          20.w, 
           0,
-          4.w, // 우 패딩
+          4.w,
           0,
         ),
         child: Icon(
           Icons.location_on_outlined,
           color: Colors.red,
-          size: 25.sp, // 아이콘 크기를 20sp로 설정
+          size: 25.sp,
         ),
       ),
     );

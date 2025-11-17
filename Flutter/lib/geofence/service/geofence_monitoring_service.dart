@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:iamhere/contact/repository/contact_entity.dart';
 import 'package:iamhere/contact/repository/contact_repository_provider.dart';
@@ -21,7 +22,6 @@ part 'geofence_monitoring_service.g.dart';
 class GeofenceMonitoringService extends _$GeofenceMonitoringService {
   StreamSubscription<Position>? _positionStreamSubscription;
   final Set<int> _enteredGeofenceIds = {}; // 이미 진입한 지오펜스 ID (중복 전송 방지)
-  Timer? _resetTimer; // 일정 시간 후 진입 상태 초기화 (같은 위치에 다시 도착했을 때 다시 전송 가능)
 
   @override
   Future<void> build() async {
@@ -92,8 +92,6 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
     await _positionStreamSubscription?.cancel();
     _positionStreamSubscription = null;
     _enteredGeofenceIds.clear();
-    _resetTimer?.cancel();
-    _resetTimer = null;
   }
 
   /// 현재 위치에서 활성화된 지오펜스 확인
@@ -129,14 +127,17 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
           _enteredGeofenceIds.add(geofence.id!);
 
           // SMS 전송
-          await _sendSmsForGeofence(geofence);
-
-          // 1시간 후 진입 상태 초기화 (같은 위치에 다시 도착했을 때 다시 전송 가능)
-          _resetTimer?.cancel();
-          _resetTimer = Timer(const Duration(hours: 1), () {
-            _enteredGeofenceIds.clear();
-            log('지오펜스 진입 상태 초기화');
-          });
+          final smsSuccess = await _sendSmsForGeofence(geofence);
+          
+          // SMS 전송 성공 시 지오펜스 비활성화
+          if (smsSuccess && geofence.id != null) {
+            try {
+              await repository.updateActiveStatus(geofence.id!, false);
+              log('지오펜스 비활성화 완료: ${geofence.name}');
+            } catch (e) {
+              log('지오펜스 비활성화 실패: $e');
+            }
+          }
         }
       }
     } catch (e) {
@@ -145,7 +146,8 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
   }
 
   /// 지오펜스 진입 시 SMS 전송
-  Future<void> _sendSmsForGeofence(GeofenceEntity geofence) async {
+  /// 반환값: SMS 전송 성공 여부
+  Future<bool> _sendSmsForGeofence(GeofenceEntity geofence) async {
     try {
       // 연락처 ID 리스트 파싱
       final List<dynamic> contactIdsJson = jsonDecode(geofence.contactIds);
@@ -155,7 +157,7 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
 
       if (contactIds.isEmpty) {
         log('연락처가 없어 SMS를 전송할 수 없습니다.');
-        return;
+        return false;
       }
 
       // 연락처 정보 가져오기
@@ -169,7 +171,7 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
 
       if (recipients.isEmpty) {
         log('연락처를 찾을 수 없습니다.');
-        return;
+        return false;
       }
 
       // 전화번호 리스트 추출 (숫자만 남기기)
@@ -189,11 +191,14 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
 
         // 기록 저장
         await _saveRecord(geofence, recipients);
+        return true;
       } else {
         log('SMS 전송 실패: ${geofence.name}');
+        return false;
       }
     } catch (e) {
       log('SMS 전송 오류: $e');
+      return false;
     }
   }
 
