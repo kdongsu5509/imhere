@@ -15,7 +15,7 @@ class AuthService implements AuthServiceInterface {
   sendIdTokenToServer(String idToken) async {
     try {
       final response = await _dio.post(
-        '/api/v1/auth',
+        '/api/v1/auth/login',
         data: {'provider': 'KAKAO', 'idToken': idToken},
       );
 
