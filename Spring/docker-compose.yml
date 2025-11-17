@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  dsko:
+    image: 518033442106.dkr.ecr.ap-northeast-2.amazonaws.com/iamhere:latest
+    container_name: iamhere-server-container
+    ports:
+      - "80:8080"
+    depends_on:
+      - redis
+    environment:
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+    networks:
+      - dsko-network
+
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - dsko-network
+
+volumes:
+  redis_data:
+
+networks:
+  dsko-network:
