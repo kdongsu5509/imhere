@@ -129,12 +129,14 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
 
           // SMS 전송
           final smsSuccess = await _sendSmsForGeofence(geofence);
-          
+
           // SMS 전송 성공 시 지오펜스 비활성화
           if (smsSuccess && geofence.id != null) {
             try {
               // GeofenceListViewModel을 통해 상태 업데이트 (UI 자동 갱신)
-              final listViewModel = ref.read(geofenceListViewModelProvider.notifier);
+              final listViewModel = ref.read(
+                geofenceListViewModelProvider.notifier,
+              );
               await listViewModel.toggleActive(geofence.id!, false);
               log('지오펜스 비활성화 완료: ${geofence.name}');
             } catch (e) {
@@ -183,7 +185,7 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
           .toList();
 
       // SMS 전송
-      final smsService = SmsService();
+      final smsService = SmsService(ref: ref);
       final success = await smsService.sendSmsToMultipleRecipients(
         phoneNumbers: phoneNumbers,
         message: geofence.message,
