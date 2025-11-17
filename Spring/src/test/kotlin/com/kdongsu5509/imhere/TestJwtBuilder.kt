@@ -1,8 +1,4 @@
-// com.kdongsu5509.imhere.auth.application.service.token.TestJwtBuilder.kt (최종 수정안)
-
-@file:Suppress("DEPRECATION")
-
-package com.kdongsu5509.imhere.auth.application.service.oidc
+package com.kdongsu5509.imhere
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm

@@ -95,9 +95,9 @@ jacocoTestReport {
                 classDirectories.files.collect { file ->
                     fileTree(dir: file, exclude: ['**/*Application*',
                                                   '**/*Config*',
-                                                  '**/*Dto*',
+                                                  '**/dto/**',
                                                   '**/vo/**',
-                                                  '**/*Entity*',
+                                                  '**/domain/**',
                                                   '**/*Exception*',
                                                   '**/*Properties*',
                                                   '**/*Mapper*',

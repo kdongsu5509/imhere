@@ -7,7 +7,6 @@ import com.kdongsu5509.imhere.auth.domain.User
 import com.kdongsu5509.imhere.common.exception.implementation.auth.UserNotFoundException
 import org.springframework.stereotype.Component
 
-
 @Component
 class UserPersistenceAdapter(
     private val userMapper: UserMapper,
