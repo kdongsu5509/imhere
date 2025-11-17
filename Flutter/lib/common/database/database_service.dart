@@ -30,7 +30,7 @@ class DatabaseService {
   }
 
   String _createRecordsTableQuery() {
-    return 'CREATE TABLE $recordTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, geofence_id INTEGER, geofence_name TEXT, message TEXT, recipients TEXT, created_at TEXT)';
+    return 'CREATE TABLE $recordTableName(id INTEGER PRIMARY KEY AUTOINCREMENT, geofence_id INTEGER, geofence_name TEXT, message TEXT, recipients TEXT, created_at TEXT, send_machine TEXT)';
   }
 
   Future<Database> _initDatabase() async {
@@ -42,7 +42,7 @@ class DatabaseService {
 
     return await openDatabase(
       path,
-      version: 2, // 버전 업그레이드
+      version: 3, // 버전 업그레이드 (send_machine 컬럼 추가)
       onCreate: (db, version) async {
         await db.execute(contactTableQuery);
         await db.execute(geofenceTableQuery);
@@ -80,6 +80,16 @@ class DatabaseService {
             await db.execute(
               'DROP TABLE IF EXISTS ${geofenceTableName}_backup',
             );
+          }
+        }
+        if (oldVersion < 3) {
+          // 버전 2에서 3으로 업그레이드: records 테이블에 send_machine 컬럼 추가
+          try {
+            await db.execute(
+              'ALTER TABLE $recordTableName ADD COLUMN send_machine TEXT DEFAULT "MOBILE"',
+            );
+          } catch (e) {
+            // 컬럼이 이미 존재하거나 오류 발생 시 무시
           }
         }
       },
@@ -196,6 +206,7 @@ class DatabaseService {
       message: entity.message,
       recipients: entity.recipients,
       createdAt: entity.createdAt,
+      sendMachine: entity.sendMachine,
     );
   }
 

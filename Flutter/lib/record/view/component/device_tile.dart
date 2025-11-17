@@ -1,32 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-// enum은 그대로 사용
-enum Device {
-  MY("내 기기에서"),
-  SERVER("서버에서");
-
-  final String value;
-
-  const Device(this.value);
-}
+import 'package:iamhere/record/repository/geofence_record_entity.dart';
 
 class DeviceTile extends StatelessWidget {
-  final Device device;
+  final SendMachine sendMachine;
 
-  const DeviceTile._({super.key, required this.device});
-
-  factory DeviceTile.my({Key? key}) {
-    return DeviceTile._(key: key, device: Device.MY);
-  }
-
-  factory DeviceTile.server({Key? key}) {
-    return DeviceTile._(key: key, device: Device.SERVER);
-  }
+  const DeviceTile({super.key, required this.sendMachine});
 
   @override
   Widget build(BuildContext context) {
-    final String description = device.value;
+    final String description = sendMachine.description;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),

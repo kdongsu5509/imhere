@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -53,94 +54,94 @@ class RecordView extends ConsumerWidget {
           flex: 4,
           child: recordsAsyncValue.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (err, stack) => Center(
-              child: Padding(
-                padding: EdgeInsets.all(20.w),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error_outline, size: 48.sp, color: Colors.red),
-                    SizedBox(height: 16.h),
-                    Text(
-                      '기록 로드 실패',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      err.toString(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                    ElevatedButton(
-                      onPressed: () {
-                        ref
-                            .read(geofenceRecordViewModelProvider.notifier)
-                            .refresh();
-                      },
-                      child: Text('다시 시도'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            error: (err, stack) => _buildToShowErrorWidget(err, ref),
             data: (records) {
               if (records.isEmpty) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.history, size: 64.sp, color: Colors.grey),
-                      SizedBox(height: 16.h),
-                      Text(
-                        '전송된 기록이 없습니다',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      Text(
-                        '지오펜스에 진입하면\n자동으로 기록이 저장됩니다',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return _buildToShowDataIsEmptyWidget();
               }
-
-              return ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: records.length,
-                itemBuilder: (context, index) {
-                  final record = records[index];
-                  final targetName = _formatRecipients(record.recipients);
-
-                  return RecordTile(
-                    tileKey: ValueKey('record_tile_${record.id}'),
-                    locationName: record.geofenceName,
-                    recordTime: record.createdAt,
-                    message: record.message,
-                    targetName: targetName,
-                    deviceLocation: "내 기기에서",
-                  );
-                },
-              );
+              return _buildToShowRecordToUserWidget(records);
             },
           ),
         ),
       ],
+    );
+  }
+
+  ListView _buildToShowRecordToUserWidget(List<GeofenceRecordEntity> records) {
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      itemCount: records.length,
+      itemBuilder: (context, index) {
+        final record = records[index];
+        final targetName = _formatRecipients(record.recipients);
+
+        return RecordTile(
+          tileKey: ValueKey('record_tile_${record.id}'),
+          locationName: record.geofenceName,
+          recordTime: record.createdAt,
+          message: record.message,
+          targetName: targetName,
+          sendMachine: record.sendMachine,
+        );
+      },
+    );
+  }
+
+  Center _buildToShowDataIsEmptyWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.history, size: 64.sp, color: Colors.grey),
+          SizedBox(height: 16.h),
+          Text(
+            '전송된 기록이 없습니다',
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[700],
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            '지오펜스에 진입하면\n자동으로 기록이 저장됩니다',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Center _buildToShowErrorWidget(Object err, WidgetRef ref) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 48.sp, color: Colors.red),
+            SizedBox(height: 16.h),
+            Text(
+              '기록 로드 실패',
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              err.toString(),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey[600], fontSize: 14.sp),
+            ),
+            SizedBox(height: 16.h),
+            ElevatedButton(
+              onPressed: () {
+                ref.read(geofenceRecordViewModelProvider.notifier).refresh();
+              },
+              child: Text('다시 시도'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

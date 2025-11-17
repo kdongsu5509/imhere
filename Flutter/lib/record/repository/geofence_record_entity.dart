@@ -5,6 +5,7 @@ class GeofenceRecordEntity {
   final String message; // 전송된 메시지
   final String recipients; // 수신자 목록 (JSON 형태, 예: "[\"홍길동\", \"김철수\"]")
   final DateTime createdAt; // 기록 생성 시간
+  final SendMachine sendMachine; // 전송한 기기
 
   GeofenceRecordEntity({
     this.id,
@@ -13,6 +14,7 @@ class GeofenceRecordEntity {
     required this.message,
     required this.recipients,
     required this.createdAt,
+    required this.sendMachine,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class GeofenceRecordEntity {
       'message': message,
       'recipients': recipients,
       'created_at': createdAt.toIso8601String(),
+      'send_machine': sendMachine.name,
     };
   }
 
@@ -34,6 +37,19 @@ class GeofenceRecordEntity {
       message: map['message'] as String,
       recipients: map['recipients'] as String,
       createdAt: DateTime.parse(map['created_at'] as String),
+      sendMachine: SendMachine.values.firstWhere(
+        (e) => e.name == map['send_machine'],
+        orElse: () => SendMachine.MOBILE,
+      ),
     );
   }
+}
+
+enum SendMachine {
+  MOBILE('이 기기에서'),
+  SERVER('서버에서');
+
+  final String description;
+
+  const SendMachine(this.description);
 }

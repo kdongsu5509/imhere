@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iamhere/common/util/date_time_formatter.dart';
+import 'package:iamhere/record/repository/geofence_record_entity.dart';
 import 'package:iamhere/record/view/component/device_tile.dart';
 
 import 'target_tile.dart';
@@ -11,7 +12,7 @@ class RecordTile extends StatelessWidget {
   final DateTime recordTime; // 2025-11-06 09:15
   final String message; // "회사에 도착했습니다!"
   final String targetName; // "팀장님"
-  final String deviceLocation; // "내 기기에서"
+  final SendMachine sendMachine; // 전송한 기기
 
   const RecordTile({
     this.tileKey,
@@ -19,7 +20,7 @@ class RecordTile extends StatelessWidget {
     required this.recordTime,
     required this.message,
     required this.targetName,
-    required this.deviceLocation,
+    required this.sendMachine,
   }) : super(key: tileKey);
 
   @override
@@ -112,7 +113,7 @@ class RecordTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         TargetTile(receiver: targetName),
-        DeviceTile.my(),
+        DeviceTile(sendMachine: sendMachine),
       ],
     );
   }

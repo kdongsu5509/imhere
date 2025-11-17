@@ -226,6 +226,7 @@ class GeofenceMonitoringService extends _$GeofenceMonitoringService {
         message: geofence.message,
         recipients: jsonEncode(recipientNames),
         createdAt: DateTime.now(),
+        sendMachine: SendMachine.MOBILE,
       );
 
       await recordRepository.save(record);
