@@ -124,6 +124,57 @@ class _GeofenceViewState extends ConsumerState<GeofenceView>
     }
   }
 
+  Future<void> _handleDelete(GeofenceEntity geofence) async {
+    if (geofence.id == null) return;
+
+    // 삭제 확인 다이얼로그 표시
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('지오펜스 삭제'),
+        content: Text('${geofence.name} 지오펜스를 삭제하시겠습니까?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('취소'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+            ),
+            child: const Text('삭제'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    try {
+      final listViewModel = ref.read(geofenceListViewModelProvider.notifier);
+      await listViewModel.delete(geofence.id!);
+
+      // 삭제 후 활성화된 지오펜스 목록 확인하여 모니터링 시작/중지
+      final geofencesAsyncValue = ref.read(geofenceListViewModelProvider);
+      geofencesAsyncValue.whenData((geofences) {
+        _startMonitoringIfNeeded(geofences);
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${geofence.name} 지오펜스가 삭제되었습니다')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('삭제 실패: ${e.toString()}')),
+        );
+      }
+    }
+  }
+
   // 연락처 ID 리스트에서 개수 가져오기
   int _getMemberCount(String contactIdsJson) {
     try {
@@ -251,12 +302,14 @@ class _GeofenceViewState extends ConsumerState<GeofenceView>
                   final address = _formatLocation(geofence.lat, geofence.lng);
 
                   return GeofenceTile(
+                    key: ValueKey(geofence.id), // 각 항목을 고유하게 식별
                     homeName: geofence.name,
                     address: address,
                     memberCount: memberCount,
                     isToggleOn: geofence.isActive,
                     onToggleChanged: (newValue) =>
                         _handleToggle(geofence, newValue),
+                    onLongPress: () => _handleDelete(geofence),
                   );
                 },
               );

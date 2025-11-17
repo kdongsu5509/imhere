@@ -7,6 +7,7 @@ class GeofenceTile extends StatelessWidget {
   final String homeName;
   final String address;
   final int memberCount;
+  final VoidCallback? onLongPress;
 
   const GeofenceTile({
     super.key,
@@ -15,40 +16,44 @@ class GeofenceTile extends StatelessWidget {
     required this.homeName,
     required this.address,
     required this.memberCount,
+    this.onLongPress,
   });
 
   @override
   Widget build(BuildContext context) {
     Color tileBackgroundColor = _getBackgroundColor();
 
-    return Container(
-      decoration: _getGeofenceTileDocoration(tileBackgroundColor),
-      width: MediaQuery.of(context).size.width,
-      height: 100.h,
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
-      margin: EdgeInsets.symmetric(vertical: 8.h), // 마진 추가하여 두 타일 분리
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: Container(
+        decoration: _getGeofenceTileDocoration(tileBackgroundColor),
+        width: MediaQuery.of(context).size.width,
+        height: 100.h,
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        margin: EdgeInsets.symmetric(vertical: 8.h), // 마진 추가하여 두 타일 분리
 
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // 1. 정보 영역 (Expanded: Flex 4)
-          Expanded(
-            flex: 4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildTileTitle(context),
-                SizedBox(height: 5.h),
-                // 주소와 인원 정보 행
-                _buildAdressAndPersonCount(),
-              ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // 1. 정보 영역 (Expanded: Flex 4)
+            Expanded(
+              flex: 4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildTileTitle(context),
+                  SizedBox(height: 5.h),
+                  // 주소와 인원 정보 행
+                  _buildAdressAndPersonCount(),
+                ],
+              ),
             ),
-          ),
 
-          // 2. 토글 스위치 영역 (Expanded: Flex 1)
-          Expanded(flex: 1, child: _buildOnOffToggle()),
-        ],
+            // 2. 토글 스위치 영역 (Expanded: Flex 1)
+            Expanded(flex: 1, child: _buildOnOffToggle()),
+          ],
+        ),
       ),
     );
   }
@@ -114,7 +119,7 @@ class GeofenceTile extends StatelessWidget {
       borderRadius: BorderRadius.all(Radius.circular(25.w)),
       boxShadow: [
         BoxShadow(
-          color: Colors.grey.withOpacity(0.1),
+          color: Colors.grey.withValues(alpha: 0.1),
           spreadRadius: 1,
           blurRadius: 5,
           offset: const Offset(0, 3), // changes position of shadow
