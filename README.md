@@ -31,46 +31,54 @@
 
 ### 설계
 
-- **Figma**: UI/UX 디자인 및 프로토타이핑
+- **Figma Make**
 
 ### 백엔드 (Spring)
 
-- **Kotlin (2.2.21)**: JVM 기반의 현대적이고 안전한 언어
-- **Spring Boot (3.5.7)**: 엔터프라이즈급 애플리케이션 개발 프레임워크
-- **Spring Security**: OAuth2 및 JWT 기반 인증/인가 처리
-- **Spring Data JPA**: 데이터베이스 접근 추상화
-- **Redis**: OIDC 공개키 캐싱 및 세션 관리
-- **H2 Database**: 개발 및 테스트용 인메모리 데이터베이스
-- **JWT (JJWT)**: 토큰 기반 인증
-- **SOLAPI SDK**: SMS 발송 서비스 연동
-- **Testcontainers**: 통합 테스트를 위한 컨테이너 기반 테스트
+- **Kotlin (2.2.21), Spring Boot (3.5.7)**
+  - `Java` 가 아닌 `kotlin` 기반의 `SpringBoot` 사용 경험을 위해 선택
+- **Spring Security, JWT (JJWT)**
+  - 카카오 OAuth2 에서 OIDC 를 사용.
+  - 해당 OIDC 를 검증할 때 사용
+  - 또한 어플리케이션 환경에서 `Session` 사용이 불가능 하여 `JWT` 선택
+  - 편리한 인증 정보 관리를 위해 `Spring Security` 선택
+- **Spring Data JPA, H2 Database**
+  - 정식 배포 단계가 아니므로 `H2 Database` 사용
+  - 차후 다른 RDB 사용 시 편리한 변경을 위해 `ORM` 사용
+- **Redis**
+  - `Redis` 를 통해 카카오 공개키를 관리.
+  - 자체 발급한 JWT RefreshToken의 만료 관리 및 저장을 위해 적용
+- **SOLAPI SDK**
+  - 문자 서비스를 보내기 위해 사용.
+  - 다른 서비스 보다 편리한 SDK 제공 및 문서 제공
+- **Testcontainers**
+  - Redis를 테스트 환경에서 테스트하기 위해 사용
 
 ### 모바일 (Flutter)
 
-- **Dart (3.8.1)**: Flutter 프레임워크의 기본 언어
-- **Flutter (3.32.5)**: 크로스 플랫폼 모바일 앱 개발 프레임워크
-- **Flutter Riverpod (3.0.3)**: 상태 관리
-- **GoRouter (17.0.0)**: 선언적 라우팅
-- **Kakao Flutter SDK (1.9.7+3)**: 카카오 로그인 연동
-- **Flutter Naver Map (1.4.1+1)**: 네이버 지도 서비스 연동
-- **Geolocator (14.0.2)**: 위치 정보 수집
-- **Permission Handler (12.0.1)**: 권한 관리
-- **Sqflite (2.4.2)**: 로컬 데이터베이스
-- **Flutter Secure Storage (9.2.2)**: 보안 토큰 저장
-- **Dio (5.9.0)**: HTTP 클라이언트
+- **Dart (3.8.1), Flutter (3.32.5)**
+- **Flutter Riverpod (3.0.3)**
+- **GoRouter (17.0.0)**
+- **Kakao Flutter SDK (1.9.7+3)**
+- **Flutter Naver Map (1.4.1+1)**
+- **Geolocator (14.0.2)**
+  - 위치를 불러오기 위해 사용
+- **Permission Handler (12.0.1)**
+  - 권한을 편리하게 부여하고자 사용
+- **Sqflite (2.4.2)**
+  - 사용자의 민감한 정보를 서버가 아닌 로컬에 저장하기 위해 사용.
+  - 익숙한 SQL 문을 사용할 수 있는 라이브러리를 적용
+- **Flutter Secure Storage (9.2.2)**
+  - 안전한 토큰 저장을 위해 사용
+- **Dio (5.9.0)**
 
 ### 인프라
 
-- **AWS EC2**: 서버 인스턴스
-- **AWS ECR**: Docker 이미지 레지스트리
-- **Docker**: 컨테이너화 및 배포
-- **Redis**: 캐시 및 세션 저장소
+- **AWS EC2, AWS ECR, Docker**
 
 ### 개발 도구
 
-- **Git & GitHub**: 버전 관리 및 협업
-- **Gradle**: 빌드 도구
-- **JaCoCo**: 코드 커버리지 측정
+- **Git & GitHub, Gradle, JaCoCo**
 
 ---
 
