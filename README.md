@@ -249,25 +249,7 @@ openMission/
 ### 아키텍처 패턴
 
 #### Spring 백엔드: Hexagonal Architecture (포트-어댑터 패턴)
-
-프로젝트는 **Hexagonal Architecture**를 기반으로 설계되었습니다:
-
-- **Domain Layer**: 비즈니스 로직의 핵심 (User, UserRole 등)
-- **Application Layer**: 유스케이스 및 서비스 구현
-  - `port/in`: 애플리케이션에 들어오는 요청을 정의하는 인터페이스 (유스케이스)
-  - `port/out`: 애플리케이션이 의존하는 외부 시스템을 정의하는 인터페이스
-  - `service`: 유스케이스 구현체
-- **Adapter Layer**: 외부 세계와의 인터페이스
-  - `adapter/in`: 입력 어댑터 (웹 컨트롤러 등)
-  - `adapter/out`: 출력 어댑터 (JPA, Redis, 외부 API 클라이언트 등)
-
-이 구조를 통해 도메인 로직과 외부 의존성을 분리하여 테스트 용이성과 유지보수성을 향상시킵니다.
-
 #### Flutter 모바일: MVVM 패턴
-
-- **Model**: 데이터 모델 및 비즈니스 로직
-- **View**: UI 컴포넌트
-- **ViewModel**: Riverpod을 이용한 상태 관리 및 비즈니스 로직 처리
 
 ---
 
