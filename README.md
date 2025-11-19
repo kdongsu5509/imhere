@@ -3,9 +3,9 @@
   <img src="https://github.com/user-attachments/assets/7215ad20-63f7-4cc8-ae69-daaef59c03bf" width=750/>
 </p>
 
+#### [ImHere 실제 작동 영상](https://www.youtube.com/shorts/wO9zaIev7I8)
 
-## 0. 프로젝트 개요
-
+# 0. 프로젝트 개요
 **ImHere**는 위치 기반 알림 서비스를 제공하는 모바일 애플리케이션입니다. 사용자가 특정 위치(지오펜스)에 진입하거나 이탈할 때 지정된 연락처로 자동으로 알림을 전송하는 기능을 제공합니다.
 
 <p align="center">
