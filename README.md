@@ -17,6 +17,14 @@
 
 **ImHere**는 위치 기반 알림 서비스를 제공하는 모바일 애플리케이션입니다. 사용자가 특정 위치(지오펜스)에 진입하거나 이탈할 때 지정된 연락처로 자동으로 알림을 전송하는 기능을 제공합니다.
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/322034c1-2c2b-4746-bbe3-a440e2ec6f77" width = 120>
+  <img src="https://github.com/user-attachments/assets/7c806fc7-cf19-4cd4-8c19-cc64610117e2" width = 120>
+  <img src="https://github.com/user-attachments/assets/f59685de-e388-4cb4-bc8b-64905a8998b3" width = 120>
+  <img src="https://github.com/user-attachments/assets/beef310c-ec39-4201-8f5b-70fdf309cddf" width = 120>
+  <img src="https://github.com/user-attachments/assets/c0278a9b-268f-44f9-9c27-3e2ee73c17f4" width = 120>
+</p>
+
 ### 주요 특징
 
 - **지오펜스 관리**: 특정 위치와 반경을 설정하여 지오펜스 영역을 등록하고 관리
