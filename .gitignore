@@ -13,8 +13,7 @@
 logs/
 temp/
 .idea/
-README.md # HELP.md가 포함되므로 README도 무시하는 것이 일관적입니다.
-HELP.md # 새로 추가: Spring 프로젝트 내 HELP.md (일반적으로 추적 X)
+desktop.ini
 
 # -----------------------------
 # 2. Flutter 프로젝트 무시 대상 (Flutter)
@@ -57,6 +56,9 @@ HELP.md # 새로 추가: Spring 프로젝트 내 HELP.md (일반적으로 추적
 
 # 민감 데이터 관리(Flutter 내부 민감 데이터)
 /Flutter/*.env
+
+# 키 암호 파일
+cert.der
 
 # -----------------------------
 # 3. Spring 프로젝트 무시 대상 (Spring)
