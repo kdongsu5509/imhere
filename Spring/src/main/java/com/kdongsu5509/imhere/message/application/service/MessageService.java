@@ -50,7 +50,7 @@ public class MessageService implements SingleMessageSendUseCasePort, MultipleMes
     private Message buildSolapiMessage(MessageSendRequest msg, String email) {
         Message solapiMessage = new Message();
         solapiMessage.setFrom(solapiProperties.getSender());
-        solapiMessage.setTo(msg.getRecieverNumber());
+        solapiMessage.setTo(msg.getReceiverNumber());
 
         String messageText = String.format(
                 "[ImHere, 위치 기반 문자 알림 서비스]\n" +

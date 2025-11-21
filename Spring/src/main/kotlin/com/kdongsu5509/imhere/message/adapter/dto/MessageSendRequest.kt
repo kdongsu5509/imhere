@@ -7,5 +7,5 @@ data class MessageSendRequest(
     val message: String,
 
     @NotNull
-    val recieverNumber: String
+    val receiverNumber: String
 )
