@@ -30,7 +30,6 @@ class SecurityConfigTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
 
-    // ObjectMapper를 주입받아 JSON 직렬화에 사용하는 것이 더 안전합니다.
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
