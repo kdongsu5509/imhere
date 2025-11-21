@@ -53,6 +53,7 @@ desktop.ini
 
 # 테스트 측정 결과 제거
 /Flutter/coverage
+/Flutter/android/build/reports
 
 # 민감 데이터 관리(Flutter 내부 민감 데이터)
 /Flutter/*.env
