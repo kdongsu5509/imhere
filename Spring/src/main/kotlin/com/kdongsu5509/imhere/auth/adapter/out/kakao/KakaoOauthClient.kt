@@ -15,7 +15,7 @@ class KakaoOauthClient(private val restClientBuilder: RestClient.Builder) : Oaut
     private val log = LoggerFactory.getLogger(OauthClientPort::class.java)
 
     @Cacheable(value = ["kakaoOidcKeys"], cacheManager = "oidcCacheManager", key = "'kakaoPublicKeySet'")
-    override fun getPublicKeyFromProivder(): OIDCPublicKeyResponse? {
+    override fun getPublicKeyFromProvider(): OIDCPublicKeyResponse? {
         val webClient = restClientBuilder.baseUrl(kakaoBaseUrl).build()
 
         log.info("카카오 공개키 요청 준비 완료")

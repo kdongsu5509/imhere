@@ -21,12 +21,12 @@ class KakaoPublicKeyScheduler(
     @PostConstruct
     fun initializePublicKeyCache() {
         log.info("카카오 공개키 초기화 시작")
-        oauthClientPort.getPublicKeyFromProivder()
+        oauthClientPort.getPublicKeyFromProvider()
         log.info("카카오 공개키 초기화 종료")
     }
 
     @Scheduled(fixedRate = DURATION)
     fun updatePublicKey() {
-        oauthClientPort.getPublicKeyFromProivder()
+        oauthClientPort.getPublicKeyFromProvider()
     }
 }
