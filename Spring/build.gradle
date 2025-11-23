@@ -44,7 +44,9 @@ dependencies {
     implementation 'org.testcontainers:testcontainers-bom:1.20.2'
     //SOLAPI - 백엔드 문자 발송 서비스를 위한 문자 서비스 API
     implementation 'com.solapi:sdk:1.0.3'
-    //JACSON
+    //Firebase
+    implementation 'com.google.firebase:firebase-admin:9.7.0'
+    //JACKSON
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     compileOnly 'org.projectlombok:lombok'
