@@ -5,6 +5,7 @@ import com.kdongsu5509.imhere.auth.application.dto.OIDCDecodePayload
 import com.kdongsu5509.imhere.auth.application.port.out.JwtParserPort
 import com.kdongsu5509.imhere.auth.application.port.out.JwtVerficationPort
 import com.kdongsu5509.imhere.auth.application.port.out.LoadPublicKeyPort
+import com.kdongsu5509.imhere.common.exception.implementation.auth.OIDCInvalidException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
@@ -47,7 +48,7 @@ class JjwtParserAdapter(
     private fun getUnsignedToken(token: String): String {
         val splitToken = token.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         if (splitToken.size != 3) {
-            throw SecurityException("토큰 형식이 올바르지 않습니다. (header.payload.signature 형식이어야 합니다.)")
+            throw OIDCInvalidException(detailMessage = "토큰 형식이 올바르지 않습니다.")
         }
         return "${splitToken[0]}.${splitToken[1]}."
     }

@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
-class AuthController(val verifyIdTokenUserCase: HandleOIDCUseCase, val reissueJwtPort: ReissueJWTPort) {
+class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtPort: ReissueJWTPort) {
 
     @PostMapping("/login")
     fun handleIdToken(@RequestBody tokenInfo: TokenInfo): ImhereJwt {
-        val jwt: SelfSignedJWT = verifyIdTokenUserCase.verifyIdTokenAndReturnJwt(
+        val jwt: SelfSignedJWT = handleOIDCUseCase.verifyIdTokenAndReturnJwt(
             tokenInfo.idToken, tokenInfo.provider
         )
 
