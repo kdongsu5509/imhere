@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.notification.adapter.out
+package com.kdongsu5509.imhere.notification.adapter.out.persistence
 
 import org.springframework.data.jpa.repository.JpaRepository
 

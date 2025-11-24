@@ -1,4 +1,4 @@
-package com.kdongsu5509.imhere.notification.adapter.out
+package com.kdongsu5509.imhere.notification.adapter.out.persistence
 
 import com.kdongsu5509.imhere.auth.adapter.out.persistence.UserJpaEntity
 import com.kdongsu5509.imhere.notification.application.domain.FcmToken
