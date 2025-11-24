@@ -3,10 +3,10 @@ package com.kdongsu5509.imhere.auth.adapter.out.jjwt
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
 import com.kdongsu5509.imhere.auth.application.port.out.JwtVerficationPort
 import com.kdongsu5509.imhere.auth.application.port.out.LoadPublicKeyPort
+import com.kdongsu5509.imhere.common.exception.implementation.auth.OIDCInvalidException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
-import java.lang.SecurityException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -100,13 +100,13 @@ class JjwtParserAdapterTest {
     }
 
     @Test
-    @DisplayName("잘못된 형식의 토큰은 SecurityException을 발생시킨다")
+    @DisplayName("잘못된 형식의 토큰은 OIDCInvalidException을 발생시킨다")
     fun getKidFromOriginTokenHeader_invalidFormat_throwsException() {
         // given
         val invalidToken = "invalid.token" // 2개 부분만 있음
 
         // when & then
-        assertThrows<SecurityException> {
+        assertThrows<OIDCInvalidException> {
             jjwtParserAdapter.getKidFromOriginTokenHeader(invalidToken)
         }.also { exception ->
             assertThat(exception.message).contains("토큰 형식이 올바르지 않습니다")
@@ -114,13 +114,13 @@ class JjwtParserAdapterTest {
     }
 
     @Test
-    @DisplayName("빈 토큰은 SecurityException을 발생시킨다")
+    @DisplayName("빈 토큰은 OIDCInvalidException을 발생시킨다")
     fun getKidFromOriginTokenHeader_emptyToken_throwsException() {
         // given
         val emptyToken = ""
 
         // when & then
-        assertThrows<SecurityException> {
+        assertThrows<OIDCInvalidException> {
             jjwtParserAdapter.getKidFromOriginTokenHeader(emptyToken)
         }
     }
