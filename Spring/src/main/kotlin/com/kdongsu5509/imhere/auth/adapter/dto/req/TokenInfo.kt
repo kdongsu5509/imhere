@@ -9,6 +9,4 @@ data class TokenInfo(
     val provider: OAuth2Provider,
     @NotBlank(message = "idToken은 필수입니다.")
     val idToken: String,
-    @NotBlank(message = "fcmToken은 필수입니다")
-    val fcmToken: String
 )
