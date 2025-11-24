@@ -5,15 +5,13 @@ import com.kdongsu5509.imhere.common.exception.implementation.auth.UserNotFoundE
 import com.kdongsu5509.imhere.notification.application.domain.FcmToken
 import com.kdongsu5509.imhere.notification.application.port.out.FindTokenPort
 import com.kdongsu5509.imhere.notification.application.port.out.SaveTokenPersistencePort
-import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Component
 
 @Component
 class FcmTokenPersistenceAdapter(
     private val fcmTokenMapper: FcmTokenMapper,
     private val springDataFcmTokenRepository: SpringDataFcmTokenRepository,
-    private val userRepository: SpringDataUserRepository,
-    private val entityManager: EntityManager
+    private val springDataUserRepository: SpringDataUserRepository,
 ) : SaveTokenPersistencePort, FindTokenPort {
 
     override fun save(fcmToken: String, userEmail: String) {
@@ -24,7 +22,7 @@ class FcmTokenPersistenceAdapter(
                 existingEntity.updateToken(fcmToken)
             }
         } else {
-            val user = userRepository.findByEmail(userEmail) ?: throw UserNotFoundException()
+            val user = springDataUserRepository.findByEmail(userEmail) ?: throw UserNotFoundException()
 
             val newEntity = FcmTokenEntity(
                 token = fcmToken,
