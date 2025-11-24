@@ -101,6 +101,7 @@ jacocoTestReport {
                                                   '**/vo/**',
                                                   '**/domain/**',
                                                   '**/port/**',
+                                                  '**/common/resp/**',
                                                   '**/*Exception*',
                                                   '**/*Properties*',
                                                   '**/*Mapper*',
