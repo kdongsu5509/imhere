@@ -84,6 +84,15 @@ enum class ErrorCode(
     ),
 
     /**
+     * FCM ERRORS : FCM 토큰 관련 오류
+     */
+    FCM_TOKEN_NOT_FOUND(
+        HttpStatus.NOT_FOUND,
+        "FCM_001",
+        "사용자의 FCM 토큰을 찾을 수 없습니다"
+    ),
+
+    /**
      * INTERNAL SERVER ERRORS : 알 수 없는 서버 오류
      */
     UNKNOWN_ERROR(

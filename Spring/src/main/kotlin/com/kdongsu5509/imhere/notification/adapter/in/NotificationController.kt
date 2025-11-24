@@ -2,8 +2,8 @@ package com.kdongsu5509.imhere.notification.adapter.`in`
 
 import com.kdongsu5509.imhere.common.resp.APIResponse
 import com.kdongsu5509.imhere.notification.adapter.dto.MyNotificationInfo
-import com.kdongsu5509.imhere.notification.adapter.dto.NotificationRequestDto
 import com.kdongsu5509.imhere.notification.application.port.`in`.SaveFcmTokenUseCasePort
+import com.kdongsu5509.imhere.notification.application.service.SelfNotificationService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.validation.annotation.Validated
@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/notification")
 class NotificationController(
-    private val saveFcmTokenUseCasePort: SaveFcmTokenUseCasePort
+    private val saveFcmTokenUseCasePort: SaveFcmTokenUseCasePort,
+    private val selfNotificationService: SelfNotificationService
 ) {
 
     @PostMapping("/enroll")
@@ -27,10 +28,11 @@ class NotificationController(
         return APIResponse.success()
     }
 
-    @PostMapping("/send")
-    fun notify(
-        @Validated @RequestBody notificationRequestDto: NotificationRequestDto
-    ) {
+    @PostMapping("/self")
+    fun notifySelf(
+        @AuthenticationPrincipal user: UserDetails
+    ): APIResponse<Unit> {
+        selfNotificationService.sendToMe(user.username)
+        return APIResponse.success()
     }
-
 }
