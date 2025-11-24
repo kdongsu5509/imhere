@@ -1,6 +1,7 @@
 package com.kdongsu5509.imhere.auth.adapter.`in`.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.kdongsu5509.imhere.TestFirebaseConfig
 import com.kdongsu5509.imhere.TestJwtBuilder
 import com.kdongsu5509.imhere.TestRedisContainer
 import com.kdongsu5509.imhere.auth.adapter.out.dto.OIDCPublicKey
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
@@ -29,6 +31,7 @@ import kotlin.test.Test
 
 @ActiveProfiles("test")
 @SpringBootTest
+@Import(TestFirebaseConfig::class)
 @AutoConfigureMockMvc
 class AuthControllerIntegrationTest : TestRedisContainer() {
 

@@ -7,14 +7,16 @@ import com.kdongsu5509.imhere.notification.application.port.out.FirebasePort
 import org.springframework.stereotype.Component
 
 @Component
-class FirebaseAdapter : FirebasePort {
+class FirebaseAdapter(
+    private val firebaseMessaging: FirebaseMessaging
+) : FirebasePort {
 
     private val title = "전송 완료"
     private val body = "문자 메시지 발송에 성공하였습니다"
 
     override fun send(fcmToken: String) {
         val fcmMessage = createFcmMessage(fcmToken)
-        FirebaseMessaging.getInstance().send(fcmMessage)
+        firebaseMessaging.send(fcmMessage)
     }
 
     private fun createFcmMessage(
