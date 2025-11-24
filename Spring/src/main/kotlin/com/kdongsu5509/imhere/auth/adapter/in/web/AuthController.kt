@@ -7,6 +7,7 @@ import com.kdongsu5509.imhere.auth.application.dto.SelfSignedJWT
 import com.kdongsu5509.imhere.auth.application.port.`in`.HandleOIDCUseCase
 import com.kdongsu5509.imhere.auth.application.port.`in`.ReissueJWTPort
 import lombok.extern.slf4j.Slf4j
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtPort: ReissueJWTPort) {
 
     @PostMapping("/login")
-    fun handleIdToken(@RequestBody tokenInfo: TokenInfo): ImhereJwt {
+    fun handleIdToken(
+        @Validated @RequestBody tokenInfo: TokenInfo
+    ): ImhereJwt {
         val jwt: SelfSignedJWT = handleOIDCUseCase.verifyIdTokenAndReturnJwt(
             tokenInfo.idToken, tokenInfo.provider
         )
@@ -27,7 +30,9 @@ class AuthController(val handleOIDCUseCase: HandleOIDCUseCase, val reissueJwtPor
     }
 
     @PostMapping("/reissue")
-    fun handleJwtTokenReissueRequest(@RequestBody jwtRefreshToken: JwtRefreshToken): ImhereJwt {
+    fun handleJwtTokenReissueRequest(
+        @Validated @RequestBody jwtRefreshToken: JwtRefreshToken
+    ): ImhereJwt {
         val jwt = reissueJwtPort.reissue(jwtRefreshToken.refreshToken)
         return ImhereJwt(jwt.accessToken, jwt.refreshToken)
     }
