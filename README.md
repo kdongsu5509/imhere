@@ -2,6 +2,8 @@
 - 단일 레포지토리에서 관리되는 모바일 코드 및 서버 코드를 분리하기로 결정하여 새로운 레포지토리로 이동했습니다.
 
 [새로운 서버 레포지토리](https://github.com/kdongsu5509/imhere_server)
+<br>
+
 [새로운 모바일 레포지토](https://github.com/kdongsu5509/imhere_mobile)
 
 # ImHere (Iamhere)
